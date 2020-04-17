@@ -79,3 +79,6 @@ def load_envs(local_dir="."):
                 ))
         # Finally Register Env in Tune
         registry.register_env(env_name, lambda: env)
+        print("-    Successfully Loaded class {} from {}".format(
+            class_name, basename
+        ))
