@@ -13,6 +13,8 @@ from ray.tune.resources import resources_to_json
 from ray.tune.tune import _make_scheduler, run_experiments
 from ray.rllib.utils.framework import try_import_tf, try_import_torch
 
+from utils.loader import env_loader
+
 # Try to import both backends for flag checking/warnings.
 tf = try_import_tf()
 torch, _ = try_import_torch()
