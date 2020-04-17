@@ -31,7 +31,7 @@ Note that -f overrides all other trial-specific command-line options.
 """
 
 # Register all necessary assets in tune registries
-load_envs(os.getcwd())
+load_envs(os.getcwd()) # Load envs
 
 
 def create_parser(parser_creator=None):
