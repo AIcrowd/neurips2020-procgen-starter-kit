@@ -67,6 +67,7 @@ def load_envs(local_dir="."):
                 "Did you name the class correctly ?".format(
                     env_name, class_name
                 ))
+        env = _class
         # Validate the class
         if not issubclass(_class, gym.Env):
             raise Exception(
@@ -77,4 +78,4 @@ def load_envs(local_dir="."):
                     class_name
                 ))
         # Finally Register Env in Tune
-        registry.register_env(env_name, lambda _: _class)
+        registry.register_env(env_name, lambda: env)
