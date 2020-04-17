@@ -12,6 +12,9 @@ import gym
 from ray import tune
 from ray.tune import registry
 
+from ray.rllib.models import ModelCatalog
+from ray.rllib.models.tf.tf_modelv2 import TFModelV2
+
 """
 Helper functions
 """
@@ -91,6 +94,43 @@ def load_envs(local_dir="."):
                 ))
         # Finally Register Env in Tune
         registry.register_env(env_name, lambda config: env(config))
+        print("-    Successfully Loaded class {} from {}".format(
+            class_name, os.path.basename(_file_path)
+        ))
+
+
+
+def load_models(local_dir="."):
+    """
+    This function takes a path to a local directory
+    and looks for a `models` folder, and imports
+    all the available files in there.
+    """
+    for _file_path in glob.glob(os.path.join(
+            local_dir, "models", "*.py")):
+        """
+        Determine the filename, env_name and class_name
+
+        # Convention :
+            - filename : snake_case
+            - classname : PascalCase
+
+            the class implementation, should be an inheritance
+            of TFModelV2 (TODO : Add PyTorch Model support too)
+        """
+        env_name, class_name, _class = load_class_from_file(_file_path)
+        CustomModel = _class
+        # Validate the class
+        if not issubclass(env, TFModelV2):
+            raise Exception(
+                "We expected the class named {} to be "
+                "a subclass of TFModelV2. "
+                "Please read more here : <insert-link>"
+                .format(
+                    class_name
+                ))
+        # Finally Register Model in ModelCatalog
+        ModelCatalog.register_custom_model("my_model", CustomModel)
         print("-    Successfully Loaded class {} from {}".format(
             class_name, os.path.basename(_file_path)
         ))
