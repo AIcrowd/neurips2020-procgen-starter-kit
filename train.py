@@ -13,7 +13,7 @@ from ray.tune.resources import resources_to_json
 from ray.tune.tune import _make_scheduler, run_experiments
 from ray.rllib.utils.framework import try_import_tf, try_import_torch
 
-from utils.loader import env_loader
+from utils.loader import load_envs
 
 # Try to import both backends for flag checking/warnings.
 tf = try_import_tf()
@@ -24,11 +24,14 @@ Training example:
     python ./train.py --run DQN --env CartPole-v0
 
 Training with Config:
-    python ./train.py -f experiments/cartpole-0.yaml
+    python ./train.py -f experiments/simple-corridor-0.yaml
 
 
 Note that -f overrides all other trial-specific command-line options.
 """
+
+# Register all necessary assets in tune registries
+load_envs(os.getcwd())
 
 
 def create_parser(parser_creator=None):

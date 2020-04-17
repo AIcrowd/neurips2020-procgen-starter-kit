@@ -1,10 +1,11 @@
 cartpole-ppo:
-    env: CartPole-v0
+    env: simple_corridor
     run: PPO
     stop:
-        episode_reward_mean: 200
         time_total_s: 30
     config:
         num_workers: 2
         num_sgd_iter: 1
         sgd_minibatch_size: 128
+        env_config:
+            corridor_length: 100

@@ -12,7 +12,7 @@ Training example:
     python ./train.py --run DQN --env CartPole-v0
 
 Training with Config:
-    python ./train.py -f experiments/cartpole-0.yaml
+    python ./train.py -f experiments/simple-corridor-0.yaml
 
 
 Note that -f overrides all other trial-specific command-line options.
