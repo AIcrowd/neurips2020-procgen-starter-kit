@@ -13,6 +13,34 @@ from ray import tune
 from ray.tune import registry
 
 """
+Helper functions
+"""
+
+
+def load_class_from_file(_file_path):
+    basename = os.path.basename(_file_path)
+    env_name = basename.replace(".py", "")
+    class_name = humps.pascalize(env_name)
+
+    # TODO : Add validation here for env_name as being snake_case
+
+    # Load the module
+    loader = importlib.machinery.SourceFileLoader(env_name, _file_path)
+    mod = types.ModuleType(loader.name)
+    loader.exec_module(mod)
+    try:
+        _class = getattr(mod, class_name)
+    except KeyError:
+        # TODO : Add a better error message
+        raise Exception(
+            "Looking for a class named {} in the file {}."
+            "Did you name the class correctly ?".format(
+                env_name, class_name
+            ))
+    return env_name, class_name, _class
+
+
+"""
 A loder utility, which takes an experiment directory
 path, and loads necessary things into the ModelRegistry.
 
@@ -50,26 +78,10 @@ def load_envs(local_dir="."):
             the class implementation, should be an inheritance
             of gym.Env
         """
-        basename = os.path.basename(_file_path)
-        env_name = basename.replace(".py", "")
-        class_name = humps.pascalize(env_name)
-
-        # Load the module
-        loader = importlib.machinery.SourceFileLoader(env_name, _file_path)
-        mod = types.ModuleType(loader.name)
-        loader.exec_module(mod)
-        try:
-            _class = getattr(mod, class_name)
-        except KeyError:
-            # TODO : Add a better error message
-            raise Exception(
-                "Looking for a class named {} in the file {}."
-                "Did you name the class correctly ?".format(
-                    env_name, class_name
-                ))
+        env_name, class_name, _class = load_class_from_file(_file_path)
         env = _class
         # Validate the class
-        if not issubclass(_class, gym.Env):
+        if not issubclass(env, gym.Env):
             raise Exception(
                 "We expected the class named {} to be "
                 "a subclass of gym.Env. "
@@ -80,5 +92,5 @@ def load_envs(local_dir="."):
         # Finally Register Env in Tune
         registry.register_env(env_name, lambda: env)
         print("-    Successfully Loaded class {} from {}".format(
-            class_name, basename
+            class_name, os.path.basename(_file_path)
         ))
