@@ -1,0 +1,10 @@
+cartpole-ppo:
+    env: CartPole-v0
+    run: PPO
+    stop:
+        episode_reward_mean: 200
+        time_total_s: 30
+    config:
+        num_workers: 2
+        num_sgd_iter: 1
+        sgd_minibatch_size: 128

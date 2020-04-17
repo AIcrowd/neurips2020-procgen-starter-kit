@@ -11,8 +11,8 @@ pip install tensorflow # or tensorflow-gpu
 Training example:
     python ./train.py --run DQN --env CartPole-v0
 
-Grid search example:
-    python ./train.py -f tuned_examples/cartpole-grid-search-example.yaml
+Training with Config:
+    python ./train.py -f experiments/cartpole-0.yaml
 
 
 Note that -f overrides all other trial-specific command-line options.
