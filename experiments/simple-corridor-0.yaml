@@ -4,6 +4,8 @@ cartpole-ppo:
     stop:
         time_total_s: 30
     config:
+        model:
+            custom_model: my_fancy_model
         num_workers: 2
         num_sgd_iter: 1
         sgd_minibatch_size: 128

@@ -13,7 +13,7 @@ from ray.tune.resources import resources_to_json
 from ray.tune.tune import _make_scheduler, run_experiments
 from ray.rllib.utils.framework import try_import_tf, try_import_torch
 
-from utils.loader import load_envs
+from utils.loader import load_envs, load_models
 
 # Try to import both backends for flag checking/warnings.
 tf = try_import_tf()
@@ -32,7 +32,7 @@ Note that -f overrides all other trial-specific command-line options.
 
 # Register all necessary assets in tune registries
 load_envs(os.getcwd()) # Load envs
-
+load_models(os.getcwd()) # Load models
 
 def create_parser(parser_creator=None):
     parser = make_parser(

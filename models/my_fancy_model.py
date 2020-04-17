@@ -2,12 +2,12 @@ from ray.rllib.models.tf.tf_modelv2 import TFModelV2
 from ray.rllib.models.tf.fcnet_v2 import FullyConnectedNetwork
 
 
-class CustomModel(TFModelV2):
+class MyFancyModel(TFModelV2):
     """Example of a custom model that just delegates to a fc-net."""
 
     def __init__(self, obs_space, action_space, num_outputs, model_config,
                  name):
-        super(CustomModel, self).__init__(obs_space, action_space, num_outputs,
+        super(MyFancyModel, self).__init__(obs_space, action_space, num_outputs,
                                           model_config, name)
         self.model = FullyConnectedNetwork(obs_space, action_space,
                                            num_outputs, model_config, name)

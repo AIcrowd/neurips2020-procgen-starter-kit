@@ -22,13 +22,13 @@ Helper functions
 
 def load_class_from_file(_file_path):
     basename = os.path.basename(_file_path)
-    env_name = basename.replace(".py", "")
-    class_name = humps.pascalize(env_name)
+    filename = basename.replace(".py", "")
+    class_name = humps.pascalize(filename)
 
     # TODO : Add validation here for env_name as being snake_case
 
     # Load the module
-    loader = importlib.machinery.SourceFileLoader(env_name, _file_path)
+    loader = importlib.machinery.SourceFileLoader(filename, _file_path)
     mod = types.ModuleType(loader.name)
     loader.exec_module(mod)
     try:
@@ -38,9 +38,9 @@ def load_class_from_file(_file_path):
         raise Exception(
             "Looking for a class named {} in the file {}."
             "Did you name the class correctly ?".format(
-                env_name, class_name
+                filename, class_name
             ))
-    return env_name, class_name, _class
+    return filename, class_name, _class
 
 
 """
@@ -99,7 +99,6 @@ def load_envs(local_dir="."):
         ))
 
 
-
 def load_models(local_dir="."):
     """
     This function takes a path to a local directory
@@ -118,10 +117,10 @@ def load_models(local_dir="."):
             the class implementation, should be an inheritance
             of TFModelV2 (TODO : Add PyTorch Model support too)
         """
-        env_name, class_name, _class = load_class_from_file(_file_path)
+        model_name, class_name, _class = load_class_from_file(_file_path)
         CustomModel = _class
         # Validate the class
-        if not issubclass(env, TFModelV2):
+        if not issubclass(CustomModel, TFModelV2):
             raise Exception(
                 "We expected the class named {} to be "
                 "a subclass of TFModelV2. "
@@ -130,7 +129,7 @@ def load_models(local_dir="."):
                     class_name
                 ))
         # Finally Register Model in ModelCatalog
-        ModelCatalog.register_custom_model("my_model", CustomModel)
-        print("-    Successfully Loaded class {} from {}".format(
+        ModelCatalog.register_custom_model(model_name, CustomModel)
+        print("-    Successfully Loaded custom Model class {} from {}".format(
             class_name, os.path.basename(_file_path)
         ))
