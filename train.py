@@ -33,6 +33,7 @@ Note that -f overrides all other trial-specific command-line options.
 # Register all necessary assets in tune registries
 load_envs(os.getcwd()) # Load envs
 load_models(os.getcwd()) # Load models
+exit()
 
 def create_parser(parser_creator=None):
     parser = make_parser(

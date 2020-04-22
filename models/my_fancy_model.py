@@ -1,3 +1,4 @@
+from ray.rllib.models import ModelCatalog
 from ray.rllib.models.tf.tf_modelv2 import TFModelV2
 from ray.rllib.models.tf.fcnet_v2 import FullyConnectedNetwork
 
@@ -18,3 +19,9 @@ class MyFancyModel(TFModelV2):
 
     def value_function(self):
         return self.model.value_function()
+
+# Register model in ModelCatalog
+ModelCatalog.register_custom_model(
+        "my_fancy_model",
+        MyFancyModel
+    )
