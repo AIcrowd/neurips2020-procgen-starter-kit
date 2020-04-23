@@ -36,17 +36,21 @@ pip install procgen
 
 # Usage
 ```
+
+git clone git@github.com:AIcrowd/neurips2020-procgen-starter-kit.git
+cd neurips2020-procgen-starter-kit
+
 # Training example:
-    python ./train.py --run PPO -f experiments/procgen-0.yaml
+python ./train.py --run PPO -f experiments/procgen-0.yaml
 
 # Rollout example:
-    # the env name and configuration are automatically picked up from 
-    # the experiment config.
-    
-    python ./rollout.py \
-        /tmp/ray/checkpoint_dir/checkpoint-0 \
-        --run PPO \
-        --episodes 100 
+# the env name and configuration are automatically picked up from 
+# the experiment config.
+
+python ./rollout.py \
+    /tmp/ray/checkpoint_dir/checkpoint-0 \
+    --run PPO \
+    --episodes 100
 
 # NOTE : The path to the checkpoint will have the following path in case of default options :
 # ~/ray_results/procgen-ppo/<experiment-name>-<uuid>/checkpoint_1/checkpoint-1
