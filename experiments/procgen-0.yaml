@@ -86,6 +86,9 @@ procgen-ppo:
         ################################################
         model:
             # === Built-in options ===
+            # More information on built in Models are available here :
+            # https://ray.readthedocs.io/en/stable/rllib-models.html#built-in-models-and-preprocessors
+            #
             # Filter config. List of [out_channels, kernel, stride] for each filter
             conv_filters: null
             # Nonlinearity for built-in convnet
@@ -121,8 +124,11 @@ procgen-ppo:
             # Please refer to :
             #   https://github.com/AIcrowd/neurips2020-procgen-starter-kit/blob/master/models/my_vision_network.py
             #  for an example
+            #
+            # RLlib documentation on implementing custom Models is available
+            # here :
+            # https://ray.readthedocs.io/en/stable/rllib-models.html#custom-models-tensorflow
             custom_model: null
-
             # Extra options to pass to custom class
             custom_options: {}
 
