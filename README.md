@@ -70,5 +70,6 @@ Please refer to [this example](https://github.com/AIcrowd/neurips2020-procgen-st
 ## How will my code be evaluated ?
 TODO - Mohanty to elaborate later
 
-# Author
-[Sharada Mohanty](https://twitter.com/MeMohanty/)
+# Author(s)
+- [Sharada Mohanty](https://twitter.com/MeMohanty/)
+- [Karl Cobbe](https://github.com/kcobbe)
