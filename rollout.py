@@ -20,7 +20,7 @@ from ray.rllib.utils.deprecation import deprecation_warning
 from ray.tune.utils import merge_dicts
 from ray.tune.registry import get_trainable_cls
 
-from utils.loader import load_envs, load_models
+from utils.loader import load_envs, load_models, load_algorithms
 
 """
 Note : This script has been adapted from :

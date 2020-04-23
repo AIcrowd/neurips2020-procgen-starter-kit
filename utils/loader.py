@@ -88,47 +88,17 @@ def load_models(local_dir="."):
         """
         _source_file(_file_path)
 
-def _uncache(exclude=[]):
-    """Remove package modules from cache except excluded ones.
-    On next import they will be reloaded.
-
-    Original Source : https://gist.github.com/schipiga/482de016fa749bc08c7b36cf5323fd1b#file-uncache-py
-
-    Args:
-        exclude (iter<str>): Sequence of module paths.
-    """
-    pkgs = []
-    for mod in exclude:
-        pkg = mod.split('.', 1)[0]
-        pkgs.append(pkg)
-
-    to_uncache = []
-    for mod in sys.modules:
-        if mod in exclude:
-            continue
-
-        if mod in pkgs:
-            to_uncache.append(mod)
-            continue
-
-            for pkg in pkgs:
-                if mod.startswith(pkg + '.'):
-                    to_uncache.append(mod)
-                    break
-
-        for mod in to_uncache:
-            del sys.modules[mod]
 
 def load_algorithms(CUSTOM_ALGORITHMS):
     """
     This function loads the custom algorithms implemented in this 
-    repository, and then ultimately monkey-patches rllib to add the 
-    said custom algorithms to the CONTRIBUTED_ALGORITHMS embedded 
-    in rllib
+    repository, and registers them with the tune registry
     """
-    import ray.rllib
-    ray.rllib.contrib.registry.CONTRIBUTED_ALGORITHMS.update(
-        CUSTOM_ALGORITHMS
-    )
-    _uncache()
+    from ray.tune import registry
+    
+    for _custom_algorithm_name in CUSTOM_ALGORITHMS:
+        _class = CUSTOM_ALGORITHMS[_custom_algorithm_name]()
+        registry.register_trainable(
+            _custom_algorithm_name,
+            _class)
 

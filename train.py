@@ -13,7 +13,7 @@ from ray.tune.resources import resources_to_json
 from ray.tune.tune import _make_scheduler, run_experiments
 from ray.rllib.utils.framework import try_import_tf, try_import_torch
 
-from utils.loader import load_envs, load_models
+from utils.loader import load_envs, load_models, load_algorithms
 
 # Try to import both backends for flag checking/warnings.
 tf = try_import_tf()
@@ -41,6 +41,8 @@ load_models(os.getcwd()) # Load models
 # Load custom algorithms
 from algorithms import CUSTOM_ALGORITHMS
 load_algorithms(CUSTOM_ALGORITHMS)
+
+print(ray.rllib.contrib.registry.CONTRIBUTED_ALGORITHMS)
 
 def create_parser(parser_creator=None):
     parser = make_parser(

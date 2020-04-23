@@ -1,7 +1,9 @@
 procgen-ppo:
     env: procgen_env_wrapper  # Change this at your own risk :D
-    run: PPO  # Can be replaced by a custom policy
-
+    run: PPO  # Can be replaced by a custom algorithm
+    # For addition of custom algorithms, 
+    # Please refer to :
+    # https://github.com/AIcrowd/neurips2020-procgen-starter-kit/blob/master/algorithms/registry.py
     ################################################
     # === Stop Conditions ===
     ################################################

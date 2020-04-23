@@ -15,6 +15,7 @@ An example integration of the random agent is shown here :
 
 def _import_custom_random_agent():
     from .custom_random_agent.custom_random_agent import CustomRandomAgent
+    return CustomRandomAgent
 
 
 CUSTOM_ALGORITHMS = {
