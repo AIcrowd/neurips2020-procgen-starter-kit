@@ -40,6 +40,9 @@ python ./rollout.py \
 # Register all necessary assets in tune registries
 load_envs(os.getcwd()) # Load envs
 load_models(os.getcwd()) # Load models
+# Load custom algorithms
+from algorithms import CUSTOM_ALGORITHMS
+load_algorithms(CUSTOM_ALGORITHMS)
 
 
 class RolloutSaver:
