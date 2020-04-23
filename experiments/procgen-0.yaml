@@ -1,0 +1,22 @@
+procgen-ppo:
+    env: procgen_env_wrapper  # Change this at your own risk :D
+    run: PPO # Can be replaced by a custom policy
+    ################################################
+    # Stop Conditions
+    ################################################
+    stop:
+        timesteps_total: 1000  # 100
+    ################################################
+    # Checkpoints
+    ################################################
+    checkpoint_freq: 10
+    checkpoint_at_end: True
+    keep_checkpoints_num: 5
+    ################################################
+    config:
+        num_workers: 1
+        num_sgd_iter: 1
+        sgd_minibatch_size: 128
+        env_config:
+            env_name: coinrun
+
