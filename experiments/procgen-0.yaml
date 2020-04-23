@@ -123,11 +123,19 @@ procgen-ppo:
             # Custom Models can be implemented in the models/ folder.
             # Please refer to :
             #   https://github.com/AIcrowd/neurips2020-procgen-starter-kit/blob/master/models/my_vision_network.py
-            #  for an example
+            #  for an example.
             #
             # RLlib documentation on implementing custom Models is available
             # here :
             # https://ray.readthedocs.io/en/stable/rllib-models.html#custom-models-tensorflow
+            #
+            # Participants can also choose to implement their models
+            # in PyTorch. Here is an example to implement a PyTorch based model :
+            # https://github.com/ray-project/ray/blob/master/rllib/examples/custom_torch_policy.py
+            #
+            # Examples of implementing the model in Keras is also available
+            # here :
+            # https://github.com/ray-project/ray/blob/master/rllib/examples/custom_keras_model.py
             custom_model: null
             # Extra options to pass to custom class
             custom_options: {}
