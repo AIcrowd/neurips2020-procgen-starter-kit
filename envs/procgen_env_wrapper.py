@@ -65,7 +65,6 @@ class ProcgenEnvWrapper(gym.Env):
 
     def step(self, action):
         return self.env.step(action)
-
 # Register Env in Ray
 registry.register_env(
     "procgen_env_wrapper",

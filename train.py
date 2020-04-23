@@ -19,6 +19,11 @@ from utils.loader import load_envs, load_models
 tf = try_import_tf()
 torch, _ = try_import_torch()
 
+"""
+Note : This script has been adapted from :
+    https://github.com/ray-project/ray/blob/master/rllib/train.py
+"""
+
 EXAMPLE_USAGE = """
 Training example:
     python ./train.py --run DQN --env CartPole-v0
