@@ -65,6 +65,23 @@ class ProcgenEnvWrapper(gym.Env):
 
     def step(self, action):
         return self.env.step(action)
+
+    def render(self, mode="human"):
+        return self.env.render(mode=mode)
+
+    def close(self):
+        return self.env.close()
+
+    def seed(self, seed=None):
+        return self.env.seed(seed)
+
+    def __repr__(self):
+        return self.env.__repr()
+
+    @property
+    def unwrapped(self):
+        return self.env.unwrapped
+
 # Register Env in Ray
 registry.register_env(
     "procgen_env_wrapper",
