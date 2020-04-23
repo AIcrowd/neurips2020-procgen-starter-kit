@@ -1,7 +1,15 @@
 procgen-ppo:
     env: procgen_env_wrapper  # Change this at your own risk :D
-    run: PPO  # Can be replaced by a custom algorithm
-    # For addition of custom algorithms, 
+    run: PPO
+    # Can be replaced by any of the available agents as described at : 
+    # https://github.com/ray-project/ray/blob/master/rllib/agents/registry.py#L103
+    # 
+    # Internally, rllib uses the terminology of Trainable, Algorithms, Agents depending
+    # on the context in which it is used. In this repository, we will consistently
+    # use the terminology of "Algorithms" to refer to these Trainables/Agents.
+    # 
+    # This can also be replaced by a custom "algorithm"
+    # For addition of custom algorithms,
     # Please refer to :
     # https://github.com/AIcrowd/neurips2020-procgen-starter-kit/blob/master/algorithms/registry.py
     ################################################
