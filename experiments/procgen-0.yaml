@@ -1,22 +1,198 @@
 procgen-ppo:
     env: procgen_env_wrapper  # Change this at your own risk :D
-    run: PPO # Can be replaced by a custom policy
+    run: PPO  # Can be replaced by a custom policy
+
     ################################################
-    # Stop Conditions
+    # === Stop Conditions ===
     ################################################
     stop:
         timesteps_total: 1000  # 100
+
     ################################################
-    # Checkpoints
+    # === Settings for Checkpoints ===
     ################################################
     checkpoint_freq: 10
     checkpoint_at_end: True
     keep_checkpoints_num: 5
-    ################################################
-    config:
-        num_workers: 1
-        num_sgd_iter: 1
-        sgd_minibatch_size: 128
-        env_config:
-            env_name: coinrun
 
+    config:
+        ################################################
+        ################################################
+        # === Settings for the Procgen Environment ===
+        ################################################
+        ################################################
+        env_config:
+            # Name of the procgen environment to train on # Note, that this parameter will be overriden during the evaluation by the AIcrowd evaluators.
+            env_name: coinrun
+            # The number of unique levels that can be generated. Set to 0 to use unlimited levels
+            num_levels: 0
+            # The lowest seed that will be used to generated levels. 'start_level' and 'num_levels' fully specify the set of possible levels
+            start_level: 0
+            # Paint player velocity info in the top left corner. Only supported by certain games.
+            paint_vel_info: False
+            # Use randomly generated assets in place of human designed assets
+            use_generated_assets: False
+            # center_agent : Determines whether observations are centered on the agent or display the full level. Override at your own risk.
+            center_agent: False
+            # sequential levels : When you reach the end of a level, the episode is ended and a new level is selected. If use_sequential_levels is set to True, reaching the end of a level does not end the episode, and the seed for the new level is derived from the current level seed. If you combine this with start_level=<some seed> and num_levels=1, you can have a single linear series of levels similar to a gym-retro or ALE game.
+            use_sequential_levels: False
+            # What variant of the levels to use, the options are "easy", "hard", "extreme", "memory", "exploration". All games support "easy" and "hard", while other options are game-specific. The default is "hard". Switching to "easy" will reduce the number of timesteps required to solve each game and is useful for testing or when working with limited compute resources. NOTE : During the evaluation phase (rollout), this will always be overriden to "easy"
+            distribution_mode: easy
+
+        ################################################
+        ################################################
+        # === Environment Settings ===
+        ################################################
+        ################################################
+        # Discount factor of the MDP.
+        gamma: 0.99
+        # The default learning rate.
+        lr: 0.0001
+        # Number of steps after which the episode is forced to terminate. Defaults
+        # to `env.spec.max_episode_steps` (if present) for Gym envs.
+        horizon: null
+        # Calculate rewards but don't reset the environment when the horizon is
+        # hit. This allows value estimation and RNN state to span across logical
+        # episodes denoted by horizon. This only has an effect if horizon != inf.
+        soft_horizon: False
+        # Don't set 'done' at the end of the episode. Note that you still need to
+        # set this if soft_horizon=True, unless your env is actually running
+        # forever without returning done=True.
+        no_done_at_end: False
+
+        # Unsquash actions to the upper and lower bounds of env's action space
+        normalize_actions: False
+        # Whether to clip rewards prior to experience postprocessing. Setting to
+        # None means clip for Atari only.
+        clip_rewards: null
+        # Whether to np.clip() actions to the action space low/high range spec.
+        clip_actions: True
+        # Whether to use rllib or deepmind preprocessors by default
+        preprocessor_pref: deepmind
+
+        # Whether to attempt to continue training if a worker crashes. The number
+        # of currently healthy workers is reported as the "num_healthy_workers"
+        # metric.
+        ignore_worker_failures: False
+        # Log system resource metrics to results. This requires `psutil` to be
+        # installed for sys stats, and `gputil` for GPU metrics.
+        # Note : The AIcrowd Evaluators will always override this to be True
+        log_sys_usage: True
+
+        ################################################
+        ################################################
+        # === Settings for Model ===
+        ################################################
+        ################################################
+        model:
+            # === Built-in options ===
+            # Filter config. List of [out_channels, kernel, stride] for each filter
+            conv_filters: null
+            # Nonlinearity for built-in convnet
+            conv_activation: relu
+            # Nonlinearity for fully connected net (tanh, relu)
+            fcnet_activation: tanh
+            # Number of hidden layers for fully connected net
+            fcnet_hiddens: [256, 256]
+            # Whether to skip the final linear layer used to resize the hidden layer
+            # outputs to size `num_outputs`. If True, then the last hidden layer
+            # should already match num_outputs.
+            no_final_linear: false
+            # Whether layers should be shared for the value function
+            vf_share_layers: true
+
+            # == LSTM ==
+            # Whether to wrap the model with a LSTM
+            use_lstm: false
+            # Max seq len for training the LSTM, defaults to 20
+            max_seq_len: 20
+            # Size of the LSTM cell
+            lstm_cell_size: 256
+            # Whether to feed a_{t-1}, r_{t-1} to LSTM
+            lstm_use_prev_action_reward: false
+            # When using modelv1 models with a modelv2 algorithm, you may have to
+            # define the state shape here (e.g., [256, 256]).
+            state_shape: null
+
+            # === Options for custom models ===
+            # Name of a custom model to use
+            #
+            # Custom Models can be implemented in the models/ folder.
+            # Please refer to :
+            #   https://github.com/AIcrowd/neurips2020-procgen-starter-kit/blob/master/models/my_vision_network.py
+            #  for an example
+            custom_model: null
+
+            # Extra options to pass to custom class
+            custom_options: {}
+
+        ################################################
+        ################################################
+        # === Settings for Rollout Worker processes ===
+        ################################################
+        ################################################
+        # Number of rollout worker actors to create for parallel sampling. Setting
+        # this to 0 will force rollouts to be done in the trainer actor.
+        num_workers: 1
+
+        # Number of environments to evaluate vectorwise per worker. This enables
+        # model inference batching, which can improve performance for inference
+        # bottlenecked workloads.
+        num_envs_per_worker: 1
+
+        # Divide episodes into fragments of this many steps each during rollouts.
+        # Sample batches of this size are collected from rollout workers and
+        # combined into a larger batch of `train_batch_size` for learning.
+        #
+        # For example, given rollout_fragment_length=100 and train_batch_size=1000:
+        #   1. RLlib collects 10 fragments of 100 steps each from rollout workers.
+        #   2. These fragments are concatenated and we perform an epoch of SGD.
+        #
+        # When using multiple envs per worker, the fragment size is multiplied by
+        # `num_envs_per_worker`. This is since we are collecting steps from
+        # multiple envs in parallel. For example, if num_envs_per_worker=5, then
+        # rollout workers will return experiences in chunks of 5*100 = 500 steps.
+        #
+        # The dataflow here can vary per algorithm. For example, PPO further
+        # divides the train batch into minibatches for multi-epoch SGD.
+        rollout_fragment_length: 200
+
+        # Whether to rollout "complete_episodes" or "truncate_episodes" to
+        # `rollout_fragment_length` length unrolls. Episode truncation guarantees
+        # evenly sized batches, but increases variance as the reward-to-go will
+        # need to be estimated at truncation boundaries.
+        batch_mode: truncate_episodes
+
+        ################################################
+        ################################################
+        # === Settings for the Trainer process ===
+        ################################################
+        ################################################
+        # Number of GPUs to allocate to the trainer process. Note that not all
+        # algorithms can take advantage of trainer GPUs. This can be fractional
+        # (e.g., 0.3 GPUs).
+        # Note : If GPUs are not available, this will be overriden by the AIcrowd evaluators to 0.
+        num_gpus: 0
+        # Training batch size, if applicable. Should be >= rollout_fragment_length.
+        # Samples batches will be concatenated together to a batch of this size,
+        # which is then passed to SGD.
+        train_batch_size: 200
+
+        ################################################
+        ################################################
+        # === Exploration Settings ===
+        ################################################
+        ################################################
+        # Default exploration behavior, iff `explore`=None is passed into
+        # compute_action(s).
+        # Set to False for no exploration behavior (e.g., for evaluation).
+        explore: True,
+        # Provide a dict specifying the Exploration object's config.
+        exploration_config:
+            # The Exploration class to use. In the simplest case, this is the name
+            # (str) of any class present in the `rllib.utils.exploration` package.
+            # You can also provide the python class directly or the full location
+            # of your class (e.g. "ray.rllib.utils.exploration.epsilon_greedy.
+            # EpsilonGreedy)
+            type: "StochasticSampling"
+            # Can add constructor kwargs here (if any)
