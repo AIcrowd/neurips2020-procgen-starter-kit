@@ -1,0 +1,16 @@
+procgen-ppo:
+    env: procgen_env_wrapper  
+    run: PPO
+    stop:
+        timesteps_total: 8000000
+    checkpoint_freq: 10000
+    checkpoint_at_end: True
+    keep_checkpoints_num: 5
+    config:
+        env_config:
+            env_name: coinrun
+        gamma: 0.99
+        lr: 0.0001
+        horizon: 1000
+        model:
+            fcnet_hiddens: [20, 20]
