@@ -50,8 +50,8 @@ class VeronikaAndriusEnv(gym.Env):
         action = int(action)
         assert action < self.STATE_SIZE, "Invalid Action Provided. Action has to be less than action size"
 
-        _mean = np.array(self.state).mean()
-        score = np.abs((self.state - _mean).mean())
+        _mean = np.array(self.state.values()).mean()
+        score = np.abs((self.state.values() - _mean).mean())
 
         _temp_state = self.state
         for _key in enumerate(_temp_state.keys()):
@@ -65,8 +65,8 @@ class VeronikaAndriusEnv(gym.Env):
         # observation, reward, done, info
         observation = self.get_observation()
 
-        _mean = np.array(self.state).mean()
-        new_score = np.abs((np.array(self.state) - _mean).mean())
+        _mean = np.array(self.state.values()).mean()
+        new_score = np.abs((np.array(self.state.values()) - _mean).mean())
 
         reward = new_score - score
 
