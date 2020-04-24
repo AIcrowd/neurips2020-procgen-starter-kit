@@ -8,9 +8,14 @@ class VeronikaAndriusEnv(gym.Env):
     """
     Procgen Wrapper file
     """
-    def __init__(self, config={}):
-        self.MAX_INT = 10
-        self.STATE_SIZE = 3
+    def __init__(self, config={
+            "MAX_INT":4,
+            "STATE_SIZE":3
+        }):
+        self.MAX_INT = config["MAX_INT"]
+        self.STATE_SIZE = config["STATE_SIZE"]
+
+        self.config = config
 
         self.state = self.reset()
 
@@ -18,24 +23,20 @@ class VeronikaAndriusEnv(gym.Env):
 
         _observation_array = []
         
-        os_dict = {}
+        # os_dict = {}
+        # for idx in range(self.STATE_SIZE):
+        #     os_dict[idx] = Discrete(self.MAX_INT)
+        # self.observation_space = Dict(os_dict)
+        # print(self.observation_space.sample())
+        ob_tuple = []
         for idx in range(self.STATE_SIZE):
-            os_dict[idx] = Discrete(self.MAX_INT)
-        self.observation_space = Dict(os_dict)
-        print(self.observation_space.sample())
+            ob_tuple.append(
+                Discrete(self.MAX_INT)
+            )
+        self.observation_space = Tuple(ob_tuple)
     
     def _get_observation(self):
-        _OBS = {}
-        for _ in range(self.STATE_SIZE):
-            _OBS[_] = self.state[_]
-        """
-        {
-            0: 1 + np.random.randint(-2, 2)
-            1: 4 + np.random.randint(-2, 2), 
-            2: 9 + np.random.randint(-2, 2),
-        }
-        """
-        return _OBS
+        return self.state
 
     def reset(self):
         self.state = np.array([
@@ -50,29 +51,22 @@ class VeronikaAndriusEnv(gym.Env):
         action = int(action)
         assert action < self.STATE_SIZE, "Invalid Action Provided. Action has to be less than action size"
 
-        _mean = np.array(self.state.values()).mean()
-        score = np.abs((self.state.values() - _mean).mean())
-
-        _temp_state = self.state
-        for _key in enumerate(_temp_state.keys()):
-
-            if _key == action:
+        for _idx in range(self.STATE_SIZE):
+            if _idx == action:
                 continue
             else:
-                _temp_state[_key] += 1
+                self.state[_idx] += 1
 
-        self.state = _temp_state
         # observation, reward, done, info
-        observation = self.get_observation()
-
-        _mean = np.array(self.state.values()).mean()
-        new_score = np.abs((np.array(self.state.values()) - _mean).mean())
-
-        reward = new_score - score
+        observation = self._get_observation()
 
         done = False
-        if len(set(self.state)) == 1:
-            done == True
+        reward = 0
+        if np.any(self.state >= self.MAX_INT):
+            done = True
+        elif len(set(self.state)) == 1:
+            done = True
+            reward = 1
         info = {}
 
         return observation, reward, done, info
