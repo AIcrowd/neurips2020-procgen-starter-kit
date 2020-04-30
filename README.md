@@ -22,7 +22,6 @@ Supported platforms:
 Supported Pythons:
 - 3.6 64-bit
 - 3.7 64-bit
-- 3.8 64-bit
 
 Supported CPUs:
 - Must have at least AVX
@@ -32,6 +31,7 @@ Supported CPUs:
 pip install ray[rllib]
 pip install tensorflow # or tensorflow-gpu
 pip install procgen
+pip install humps
 ```
 
 # Usage
