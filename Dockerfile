@@ -34,12 +34,13 @@ RUN chown -R ${USER_NAME}:${USER_NAME} ${HOME_DIR}
 USER ${USER_NAME}
 WORKDIR ${HOME_DIR}
 
+ENV CONDA_DIR ${HOME_DIR}/.conda
+
 RUN wget -nv -O miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.2-Linux-x86_64.sh \
- && bash miniconda.sh -b -p ${HOME_DIR}/conda \
- && . ${HOME_DIR}/conda/etc/profile.d/conda.sh \
+ && bash miniconda.sh -b -p ${CONDA_DIR} \
+ && . ${CONDA_DIR}/etc/profile.d/conda.sh \
  && conda create -n aicrowd -y
 
-ENV CONDA_DIR ${HOME_DIR}/conda
 ENV PATH ${CONDA_DIR}/bin:${PATH}
 ENV CONDA_DEFAULT_ENV ${CONDA_DIR}/envs/aicrowd
 
