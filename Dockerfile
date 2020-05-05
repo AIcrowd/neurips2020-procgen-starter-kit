@@ -2,7 +2,7 @@ FROM nvidia/cuda:10.0-cudnn7-runtime-ubuntu18.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt udpate && apt install -y wget
+RUN apt update && apt install -y wget locales
 
 # Unicode support:
 RUN locale-gen en_US.UTF-8
@@ -39,7 +39,7 @@ RUN wget -nv -O miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-py37
  && . ${HOME_DIR}/conda/etc/profile.d/conda.sh \
  && conda create -n aicrowd -y
 
-ENV CONDA_DIR ${APP_BASE}/conda
+ENV CONDA_DIR ${HOME_DIR}/conda
 ENV PATH ${CONDA_DIR}/bin:${PATH}
 ENV CONDA_DEFAULT_ENV ${CONDA_DIR}/envs/aicrowd
 
