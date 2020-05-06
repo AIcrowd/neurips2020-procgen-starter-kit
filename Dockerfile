@@ -6,6 +6,10 @@ RUN apt -qq update && apt -qq install -y --no-install-recommends \
     wget \
     locales \
     libglib2.0 \
+    libsm6 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
  && rm -rf /var/cache/*
 
 # Unicode support:
