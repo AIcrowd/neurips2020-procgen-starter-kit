@@ -8,6 +8,6 @@ python train.py -f experiments/procgen-0.yaml \
 STATUS_CODE=$?
 
 mv ray_results/* ${OUTPUTS_DIR}/ray
-mv mlruns ${OUTPUTS}/mlruns
+mv mlruns ${OUTPUTS_DIR}/mlruns
 
 exit $STATUS_CODE
