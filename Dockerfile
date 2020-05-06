@@ -11,6 +11,7 @@ RUN apt -qq update && apt -qq install -y --no-install-recommends \
     libxext6 \
     libxrender-dev \
     xvfb \
+    freeglut3-dev \
  && rm -rf /var/cache/*
 
 # Unicode support:
