@@ -6,6 +6,6 @@ STATUS_CODE=$?
 sleep 100000
 
 mv ray_results/procgen ${OUTPUTS_DIR}/ray
-mv mlruns ${OUTPUTS}/mlflow
+mv mlruns ${OUTPUTS}/mlruns
 
 exit $STATUS_CODE
