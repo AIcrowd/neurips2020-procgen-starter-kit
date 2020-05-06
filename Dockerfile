@@ -48,7 +48,8 @@ ENV CONDA_DIR ${HOME_DIR}/.conda
 
 RUN wget -nv -O miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.2-Linux-x86_64.sh \
  && bash miniconda.sh -b -p ${CONDA_DIR} \
- && . ${CONDA_DIR}/etc/profile.d/conda.sh
+ && . ${CONDA_DIR}/etc/profile.d/conda.sh \
+ && rm -rf miniconda.sh
 
 ENV PATH ${CONDA_DIR}/bin:${PATH}
 
