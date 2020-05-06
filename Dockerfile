@@ -52,4 +52,4 @@ RUN wget -nv -O miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-py37
 
 ENV PATH ${CONDA_DIR}/bin:${PATH}
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt --no-cache-dir
