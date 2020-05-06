@@ -10,6 +10,7 @@ RUN apt -qq update && apt -qq install -y --no-install-recommends \
     libsm6 \
     libxext6 \
     libxrender-dev \
+    xvfb \
  && rm -rf /var/cache/*
 
 # Unicode support:
