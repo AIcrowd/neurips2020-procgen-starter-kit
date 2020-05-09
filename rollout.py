@@ -10,6 +10,7 @@ import pickle
 import shelve
 
 import gym
+import gym.wrappers
 import ray
 from ray.rllib.env import MultiAgentEnv
 from ray.rllib.env.base_env import _DUMMY_AGENT_ID
@@ -397,6 +398,7 @@ def rollout(agent,
         prev_rewards = collections.defaultdict(lambda: 0.)
         done = False
         reward_total = 0.0
+        episode_steps = 0
         while not done and keep_going(steps, num_steps, episodes,
                                       num_episodes):
             multi_obs = obs if multiagent else {_DUMMY_AGENT_ID: obs}
@@ -427,6 +429,7 @@ def rollout(agent,
 
             action = action if multiagent else action[_DUMMY_AGENT_ID]
             next_obs, reward, done, info = env.step(action)
+            episode_steps += 1
             if multiagent:
                 for agent_id, r in reward.items():
                     prev_rewards[agent_id] = r
@@ -444,7 +447,7 @@ def rollout(agent,
             steps += 1
             obs = next_obs
         saver.end_rollout()
-        print("Episode #{}: reward: {}".format(episodes, reward_total))
+        print("Episode #{}: reward: {} steps: {}".format(episodes, reward_total, episode_steps))
         if done:
             episodes += 1
 
@@ -456,12 +459,6 @@ if __name__ == "__main__":
     # Old option: monitor, use video-dir instead.
     if args.monitor:
         deprecation_warning("--monitor", "--video-dir=[some dir]")
-    # User tries to record videos, but no-render is set: Error.
-    if (args.monitor or args.video_dir) and args.no_render:
-        raise ValueError(
-            "You have --no-render set, but are trying to record rollout videos"
-            " (via options --video-dir/--monitor)! "
-            "Either unset --no-render or do not use --video-dir/--monitor.")
     # --use_shelve w/o --out option.
     if args.use_shelve and not args.out:
         raise ValueError(

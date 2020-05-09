@@ -16,12 +16,12 @@ procgen-ppo:
     # === Stop Conditions ===
     ################################################
     stop:
-        timesteps_total: 1000  # 100
+        timesteps_total: 8000000
 
     ################################################
     # === Settings for Checkpoints ===
     ################################################
-    checkpoint_freq: 10
+    checkpoint_freq: 100
     checkpoint_at_end: True
     keep_checkpoints_num: 5
 
@@ -43,7 +43,7 @@ procgen-ppo:
             # Use randomly generated assets in place of human designed assets
             use_generated_assets: False
             # center_agent : Determines whether observations are centered on the agent or display the full level. Override at your own risk.
-            center_agent: False
+            center_agent: True
             # sequential levels : When you reach the end of a level, the episode is ended and a new level is selected. If use_sequential_levels is set to True, reaching the end of a level does not end the episode, and the seed for the new level is derived from the current level seed. If you combine this with start_level=<some seed> and num_levels=1, you can have a single linear series of levels similar to a gym-retro or ALE game.
             use_sequential_levels: False
             # What variant of the levels to use, the options are "easy", "hard", "extreme", "memory", "exploration". All games support "easy" and "hard", while other options are game-specific. The default is "hard". Switching to "easy" will reduce the number of timesteps required to solve each game and is useful for testing or when working with limited compute resources. NOTE : During the evaluation phase (rollout), this will always be overriden to "easy"
@@ -55,9 +55,42 @@ procgen-ppo:
         ################################################
         ################################################
         # Discount factor of the MDP.
-        gamma: 0.99
+        gamma: 0.999
+        # The GAE(lambda) parameter.
+        lambda: 0.95
         # The default learning rate.
-        lr: 0.0001
+        lr: 5.0e-4
+        # Number of SGD iterations in each outer loop (i.e., number of epochs to
+        # execute per train batch).
+        num_sgd_iter: 3
+        # Total SGD batch size across all devices for SGD. This defines the
+        # minibatch size within each epoch.
+        sgd_minibatch_size: 2048 # 8 minibatches per epoch
+        # Training batch size, if applicable. Should be >= rollout_fragment_length.
+        # Samples batches will be concatenated together to a batch of this size,
+        # which is then passed to SGD.
+        train_batch_size: 16384 # 256 * 64
+        # Initial coefficient for KL divergence.
+        kl_coeff: 0.0
+        # Target value for KL divergence.
+        kl_target: 0.01
+        # Coefficient of the value function loss. IMPORTANT: you must tune this if
+        # you set vf_share_layers: True.
+        vf_loss_coeff: 0.5
+        # Coefficient of the entropy regularizer.
+        entropy_coeff: 0.01
+        # PPO clip parameter.
+        clip_param: 0.2
+        # Clip param for the value function. Note that this is sensitive to the
+        # scale of the rewards. If your expected V is large, increase this.
+        vf_clip_param: 0.2
+        # If specified, clip the global norm of gradients by this amount.
+        grad_clip: 0.5
+        # Which observation filter to apply to the observation.
+        observation_filter: NoFilter
+        # Share layers for value function. If you set this to True, it's important
+        # to tune vf_loss_coeff.
+        vf_share_layers: True
         # Number of steps after which the episode is forced to terminate. Defaults
         # to `env.spec.max_episode_steps` (if present) for Gym envs.
         horizon: null
@@ -95,37 +128,40 @@ procgen-ppo:
         ################################################
         ################################################
         model:
+            # These options are used when not using a custom model, to use a default model,
+            # comment out the `custom_model` field and then un-comment the below model options.
+
             # === Built-in options ===
             # More information on built in Models are available here :
             # https://ray.readthedocs.io/en/stable/rllib-models.html#built-in-models-and-preprocessors
             #
             # Filter config. List of [out_channels, kernel, stride] for each filter
-            conv_filters: null
+            # conv_filters: null
             # Nonlinearity for built-in convnet
-            conv_activation: relu
+            # conv_activation: relu
             # Nonlinearity for fully connected net (tanh, relu)
-            fcnet_activation: tanh
+            # fcnet_activation: tanh
             # Number of hidden layers for fully connected net
-            fcnet_hiddens: [256, 256]
+            # fcnet_hiddens: [256, 256]
             # Whether to skip the final linear layer used to resize the hidden layer
             # outputs to size `num_outputs`. If True, then the last hidden layer
             # should already match num_outputs.
-            no_final_linear: false
+            # no_final_linear: false
             # Whether layers should be shared for the value function
-            vf_share_layers: true
+            # vf_share_layers: true
 
             # == LSTM ==
             # Whether to wrap the model with a LSTM
-            use_lstm: false
+            # use_lstm: false
             # Max seq len for training the LSTM, defaults to 20
-            max_seq_len: 20
+            # max_seq_len: 20
             # Size of the LSTM cell
-            lstm_cell_size: 256
+            # lstm_cell_size: 256
             # Whether to feed a_{t-1}, r_{t-1} to LSTM
-            lstm_use_prev_action_reward: false
+            # lstm_use_prev_action_reward: false
             # When using modelv1 models with a modelv2 algorithm, you may have to
             # define the state shape here (e.g., [256, 256]).
-            state_shape: null
+            # state_shape: null
 
             # === Options for custom models ===
             # Name of a custom model to use
@@ -146,7 +182,7 @@ procgen-ppo:
             # Examples of implementing the model in Keras is also available
             # here :
             # https://github.com/ray-project/ray/blob/master/rllib/examples/custom_keras_model.py
-            custom_model: null
+            custom_model: impala_cnn_tf
             # Extra options to pass to custom class
             custom_options: {}
 
@@ -157,12 +193,17 @@ procgen-ppo:
         ################################################
         # Number of rollout worker actors to create for parallel sampling. Setting
         # this to 0 will force rollouts to be done in the trainer actor.
-        num_workers: 1
+        num_workers: 8
 
         # Number of environments to evaluate vectorwise per worker. This enables
         # model inference batching, which can improve performance for inference
         # bottlenecked workloads.
-        num_envs_per_worker: 1
+        num_envs_per_worker: 8
+
+        # Number of GPUs to allocate per worker. This can be fractional. This is
+        # usually needed only if your env itself requires a GPU (i.e., it is a
+        # GPU-intensive video game), or model inference is unusually expensive.
+        num_gpus_per_worker: 0.1
 
         # Divide episodes into fragments of this many steps each during rollouts.
         # Sample batches of this size are collected from rollout workers and
@@ -179,7 +220,7 @@ procgen-ppo:
         #
         # The dataflow here can vary per algorithm. For example, PPO further
         # divides the train batch into minibatches for multi-epoch SGD.
-        rollout_fragment_length: 200
+        rollout_fragment_length: 256
 
         # Whether to rollout "complete_episodes" or "truncate_episodes" to
         # `rollout_fragment_length` length unrolls. Episode truncation guarantees
@@ -196,11 +237,7 @@ procgen-ppo:
         # algorithms can take advantage of trainer GPUs. This can be fractional
         # (e.g., 0.3 GPUs).
         # Note : If GPUs are not available, this will be overriden by the AIcrowd evaluators to 0.
-        num_gpus: 0
-        # Training batch size, if applicable. Should be >= rollout_fragment_length.
-        # Samples batches will be concatenated together to a batch of this size,
-        # which is then passed to SGD.
-        train_batch_size: 200
+        num_gpus: 0.2
 
         ################################################
         ################################################
