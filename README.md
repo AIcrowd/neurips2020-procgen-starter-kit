@@ -56,7 +56,7 @@ python ./rollout.py \
 ```
 
 ## How do I add a custom Model ?
-To add a custom model, create a file inside `models/` directory and name is `models/my_vision_network.py`.
+To add a custom model, create a file inside `models/` directory and name it `models/my_vision_network.py`.
 Please refer [here](https://github.com/AIcrowd/neurips2020-procgen-starter-kit/blob/master/models/my_vision_network.py ) for a working implementation of how to add a custom model. You can then set the `custom_model` field in the experiment yaml to `my_vision_network` to cause that model to be used.
 
 ## How do I add a custom Algorithm/Trainable/Agent ?
@@ -64,7 +64,7 @@ Please refer to the instructions [here](https://github.com/AIcrowd/neurips2020-p
 
 ## What configs parameters do I have available ?
 This is a very thin wrapper over RLLib. Hence, you have all the RLLib config options available in the experiment configuration (YAML) file to play with.
-Please refer to [this example](https://github.com/AIcrowd/neurips2020-procgen-starter-kit/blob/master/experiments/procgen-0.yaml) for an exaplanation on the structure and available options in the experiment config file.
+Please refer to [this example](https://github.com/AIcrowd/neurips2020-procgen-starter-kit/blob/master/experiments/procgen-0.yaml) for an explanation on the structure and available options in the experiment config file.
 
 ## How will my code be evaluated ?
 TODO - Mohanty to elaborate later
