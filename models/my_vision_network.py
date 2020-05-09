@@ -1,7 +1,7 @@
 
 from ray.rllib.models.tf.tf_modelv2 import TFModelV2
 from ray.rllib.models.tf.visionnet_v1 import _get_filter_config
-from ray.rllib.models.tf.misc import normc_initializer, get_activation_fn
+from ray.rllib.models.tf.misc import normc_initializer
 from ray.rllib.utils.framework import try_import_tf
 
 from ray.rllib.models import ModelCatalog
@@ -23,7 +23,10 @@ class MyVisionNetwork(TFModelV2):
         super(MyVisionNetwork, self).__init__(obs_space, action_space,
                                             num_outputs, model_config, name)
 
-        activation = get_activation_fn(model_config.get("conv_activation"))
+        if model_config.get("conv_activation") == "linear":
+            activation = None
+        else:
+            activation = getattr(tf.nn, name)
         filters = model_config.get("conv_filters")
         if not filters:
             filters = _get_filter_config(obs_space.shape)
