@@ -122,6 +122,11 @@ procgen-ppo:
         # Note : The AIcrowd Evaluators will always override this to be True
         log_sys_usage: True
 
+        # Use PyTorch (instead of tf). If using `rllib train`, this can also be
+        # enabled with the `--torch` flag.
+        # NOTE: Some agents may not support `torch` yet and throw an error.
+        use_pytorch: False
+
         ################################################
         ################################################
         # === Settings for Model ===
