@@ -175,3 +175,5 @@ cd <repository>
 # Author(s)
 - [Sharada Mohanty](https://twitter.com/MeMohanty/)
 - [Karl Cobbe](https://github.com/kcobbe)
+- [Jyotish](https://github.com/jyotishp)
+- [Shivam Khandelwal](https://github.com/skbly7)
