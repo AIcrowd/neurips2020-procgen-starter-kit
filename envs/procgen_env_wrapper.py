@@ -57,8 +57,8 @@ class ProcgenEnvWrapper(gym.Env):
         return self.env.__repr()
 
     @property
-    def unwrapped(self):
-        return self.env.unwrapped
+    def spec(self):
+        return self.env.spec
 
 # Register Env in Ray
 registry.register_env(
