@@ -116,7 +116,6 @@ Your repository should have an aicrowd.json file with following fields:
 {
     "challenge_id" : "evaluations-api-neurips-2020-procgen",
     "grader_id": "evaluations-api-neurips-2020-procgen",
-    "evaluations_api_grader_id" : "46",
     "authors" : ["aicrowd-bot"],
     "description" : "NeurIPS 2020: Procgen Competition Agent",
     "docker_build" : false

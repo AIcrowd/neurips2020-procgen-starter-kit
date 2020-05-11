@@ -1,6 +1,5 @@
 {
     "challenge_id" : "evaluations-api-neurips-2020-procgen",
-    "evaluations_api_grader_id" : "56",
     "grader_id": "evaluations-api-neurips-2020-procgen",
     "authors" : ["Sharada Mohanty <mohanty@aicrowd.com>"],
     "description": "Procgen test submission",
