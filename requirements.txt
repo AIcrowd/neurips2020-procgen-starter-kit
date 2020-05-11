@@ -1,5 +1,4 @@
-ray[rllib]
-procgen
-tensorflow
-humps
+ray[rllib]==0.8.4
+procgen==0.9.4
+tensorflow==2.1.0
 mlflow
