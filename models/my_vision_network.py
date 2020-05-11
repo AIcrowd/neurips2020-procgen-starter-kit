@@ -1,4 +1,3 @@
-
 from ray.rllib.models.tf.tf_modelv2 import TFModelV2
 from ray.rllib.models.tf.visionnet_v1 import _get_filter_config
 from ray.rllib.models.tf.misc import normc_initializer
@@ -15,122 +14,98 @@ NOTE : This implementation has been taken from :
     to act as a reference implementation for implementing custom models.
 """
 
+
+def get_conv_activation(model_config):
+    if model_config.get("conv_activation") == "linear":
+        activation = None
+    else:
+        activation = getattr(tf.nn, model_config.get("conv_activation"))
+    return activation
+
+
+def get_fc_activation(model_config):
+    activation = model_config.get("fcnet_activation")
+    if activation is None:
+        activation = tf.keras.layers.ReLU()
+    return activation
+
+
+def conv_layers(x, model_config, obs_space, prefix=""):
+    filters = model_config.get("conv_filters")
+    if not filters:
+        filters = _get_filter_config(obs_space.shape)
+
+    activation = get_conv_activation(model_config)
+
+    for i, (out_size, kernel, stride) in enumerate(filters, 1):
+        x = tf.keras.layers.Conv2D(
+            out_size,
+            kernel,
+            strides=(stride, stride),
+            activation=activation,
+            padding="same",
+            data_format="channels_last",
+            name=f"{prefix}conv{i}",
+        )(x)
+    return x
+
+
+def fc_layers(x, model_config, prefix=""):
+    x = tf.keras.layers.Flatten()(x)
+    activation = get_fc_activation(model_config)
+    fc_layers_config = model_config.get("fcnet_hiddens", [])
+    for i, dim in enumerate(fc_layers_config):
+        x = tf.keras.layers.Dense(
+            units=dim, activation=activation, name=f"{prefix}fc-{i}"
+        )(x)
+    return x
+
+
+def get_final_fc(x, num_outputs, model_config):
+    x = tf.keras.layers.Dense(num_outputs, name="pi")(x)
+    return x
+
+
+def value_layers(x, inputs, obs_space, model_config):
+    if not model_config.get("vf_share_layers"):
+        x = conv_layers(inputs, model_config, obs_space, prefix="vf-")
+        x = fc_layers(x, model_config, prefix="vf-")
+    x = tf.keras.layers.Dense(units=1, name="vf")(x)
+    return x
+
+
 class MyVisionNetwork(TFModelV2):
     """Generic vision network implemented in ModelV2 API."""
 
-    def __init__(self, obs_space, action_space, num_outputs, model_config,
-                 name):
-        super(MyVisionNetwork, self).__init__(obs_space, action_space,
-                                            num_outputs, model_config, name)
+    def __init__(self, obs_space, action_space, num_outputs, model_config, name):
+        super(MyVisionNetwork, self).__init__(
+            obs_space, action_space, num_outputs, model_config, name
+        )
 
-        if model_config.get("conv_activation") == "linear":
-            activation = None
-        else:
-            activation = getattr(tf.nn, name)
-        filters = model_config.get("conv_filters")
-        if not filters:
-            filters = _get_filter_config(obs_space.shape)
-        no_final_linear = model_config.get("no_final_linear")
-        vf_share_layers = model_config.get("vf_share_layers")
-
-        inputs = tf.keras.layers.Input(
-            shape=obs_space.shape, name="observations")
+        inputs = tf.keras.layers.Input(shape=obs_space.shape, name="observations")
         last_layer = inputs
-
-        # Build the action layers
-        for i, (out_size, kernel, stride) in enumerate(filters[:-1], 1):
-            last_layer = tf.keras.layers.Conv2D(
-                out_size,
-                kernel,
-                strides=(stride, stride),
-                activation=activation,
-                padding="same",
-                data_format="channels_last",
-                name="conv{}".format(i))(last_layer)
-        out_size, kernel, stride = filters[-1]
-
-        # No final linear: Last layer is a Conv2D and uses num_outputs.
-        if no_final_linear:
-            last_layer = tf.keras.layers.Conv2D(
-                num_outputs,
-                kernel,
-                strides=(stride, stride),
-                activation=activation,
-                padding="valid",
-                data_format="channels_last",
-                name="conv_out")(last_layer)
-            conv_out = last_layer
-        # Finish network normally (w/o overriding last layer size with
-        # `num_outputs`), then add another linear one of size `num_outputs`.
-        else:
-            last_layer = tf.keras.layers.Conv2D(
-                out_size,
-                kernel,
-                strides=(stride, stride),
-                activation=activation,
-                padding="valid",
-                data_format="channels_last",
-                name="conv{}".format(i + 1))(last_layer)
-            conv_out = tf.keras.layers.Conv2D(
-                num_outputs, [1, 1],
-                activation=None,
-                padding="same",
-                data_format="channels_last",
-                name="conv_out")(last_layer)
-
+        # Build the conv layers
+        last_layer = conv_layers(last_layer, model_config, obs_space)
+        # Build the linear layers
+        last_layer = fc_layers(last_layer, model_config)
+        # Final linear layer
+        logits = get_final_fc(last_layer, num_outputs, model_config)
         # Build the value layers
-        if vf_share_layers:
-            last_layer = tf.keras.layers.Lambda(
-                lambda x: tf.squeeze(x, axis=[1, 2]))(last_layer)
-            value_out = tf.keras.layers.Dense(
-                1,
-                name="value_out",
-                activation=None,
-                kernel_initializer=normc_initializer(0.01))(last_layer)
-        else:
-            # build a parallel set of hidden layers for the value net
-            last_layer = inputs
-            for i, (out_size, kernel, stride) in enumerate(filters[:-1], 1):
-                last_layer = tf.keras.layers.Conv2D(
-                    out_size,
-                    kernel,
-                    strides=(stride, stride),
-                    activation=activation,
-                    padding="same",
-                    data_format="channels_last",
-                    name="conv_value_{}".format(i))(last_layer)
-            out_size, kernel, stride = filters[-1]
-            last_layer = tf.keras.layers.Conv2D(
-                out_size,
-                kernel,
-                strides=(stride, stride),
-                activation=activation,
-                padding="valid",
-                data_format="channels_last",
-                name="conv_value_{}".format(i + 1))(last_layer)
-            last_layer = tf.keras.layers.Conv2D(
-                1, [1, 1],
-                activation=None,
-                padding="same",
-                data_format="channels_last",
-                name="conv_value_out")(last_layer)
-            value_out = tf.keras.layers.Lambda(
-                lambda x: tf.squeeze(x, axis=[1, 2]))(last_layer)
+        value_out = value_layers(last_layer, inputs, obs_space, model_config)
 
-        self.base_model = tf.keras.Model(inputs, [conv_out, value_out])
+        self.base_model = tf.keras.Model(inputs, [logits, value_out])
         self.register_variables(self.base_model.variables)
 
     def forward(self, input_dict, state, seq_lens):
         # explicit cast to float32 needed in eager
-        model_out, self._value_out = self.base_model(
-            tf.cast(input_dict["obs"], tf.float32))
-        return tf.squeeze(model_out, axis=[1, 2]), state
+        logits, self._value_out = self.base_model(
+            tf.cast(input_dict["obs"], tf.float32)
+        )
+        return logits, state
 
     def value_function(self):
         return tf.reshape(self._value_out, [-1])
 
+
 # Register model in ModelCatalog
-ModelCatalog.register_custom_model(
-        "my_vision_network",
-        MyVisionNetwork
-    )
+ModelCatalog.register_custom_model("my_vision_network", MyVisionNetwork)
