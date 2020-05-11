@@ -86,16 +86,18 @@ TODO - Mohanty to elaborate later
 │   │   └── __init__.py
 │   ├── __init__.py
 │   └── registry.py
-├── debug.sh                        # Locally run the submission
 ├── Dockerfile                      # Docker config for your submission environment
 ├── docs
 │   ├── algorithms.md
 │   ├── procgen-basic-usage.md
 │   └── submission.md
+│   └── running.md
 ├── envs                            # `rllib` wrapper for procgen (required)
 │   └── procgen_env_wrapper.py
 ├── experiments                     # Directory contaning the config for different experiments
 │   └── procgen-starter-example.yaml
+│   └── impala-baseline.yaml        # Baseline using impala
+│   └── <your-experiment>.yaml      # Contribute your experiment by adding it here and send us merge request
 ├── models                          # Directory to implement custom models
 │   └── my_vision_network.py
 ├── README.md
