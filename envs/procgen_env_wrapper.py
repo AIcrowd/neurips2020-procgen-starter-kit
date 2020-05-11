@@ -28,6 +28,8 @@ class ProcgenEnvWrapper(gym.Env):
 
         env = gym.make(f"procgen:procgen-{self.env_name}-v0", **self.config)
         self.env = env
+        # Enable video recording features
+        self.metadata = {"render.modes": ["rgb_array", "human"]}
 
         self.action_space = self.env.action_space
         self.observation_space = self.env.observation_space
