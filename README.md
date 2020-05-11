@@ -28,10 +28,9 @@ Supported CPUs:
 
 # Installation
 ```
-pip install ray[rllib]
-pip install tensorflow # or tensorflow-gpu
-pip install procgen
-pip install humps
+pip install ray[rllib]==0.8.4
+pip install tensorflow==2.1.0 # or tensorflow-gpu
+pip install procgen==0.9.4
 ```
 
 # Usage
