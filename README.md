@@ -3,7 +3,7 @@
 
 This is the starter kit for the [NeurIPS 2020 - Procgen competition](LINK-TO-BE-INSERTED) hosted on [AIcrowd](https://www.aicrowd.com/)
 
-# About ProcGen Benchmark
+# 🕵️ About ProcGen Benchmark
 
 16 simple-to-use procedurally-generated [gym](https://github.com/openai/gym) environments which provide a direct measure of how quickly a reinforcement learning agent learns generalizable skills.  The environments run at high speed (thousands of steps per second) on a single core.
 
@@ -15,7 +15,7 @@ These environments are associated with the paper [Leveraging Procedural Generati
 * Non-deterministic: Gym Retro environments are always the same, so you can memorize a sequence of actions that will get the highest reward.  Procgen environments are randomized so this is not possible.
 * Customizable: If you install from source, you can perform experiments where you change the environments, or build your own environments.  The environment-specific code for each environment is often less than 300 lines.  This is almost impossible with Gym Retro.
 
-# System Requirements
+# ⚙ System Requirements
 
 * Supported platforms:
   - Windows 10
@@ -29,14 +29,14 @@ These environments are associated with the paper [Leveraging Procedural Generati
 * Supported CPUs:
   - Must have at least AVX
 
-# Installation
+# 🔧 Installation
 ```
 pip install ray[rllib]==0.8.4
 pip install tensorflow==2.1.0 # or tensorflow-gpu
 pip install procgen==0.9.4
 ```
 
-# Getting Started
+# 💪 Getting Started
 
 ### Clone the repository
 
@@ -73,7 +73,7 @@ Please refer to [this example](https://github.com/AIcrowd/neurips2020-procgen-st
 ## How will my code be evaluated ?
 TODO - Mohanty to elaborate later
 
-# Submission
+# 🚀 Submission
 
 ## Repository Structure
 
