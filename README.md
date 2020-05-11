@@ -57,6 +57,8 @@ cd neurips2020-procgen-starter-kit
 ./run.sh --rollout
 ```
 
+Please refer to the instructions [here](https://github.com/AIcrowd/neurips2020-procgen-starter-kit/blob/master/docs/running.md) for advanced users.
+
 ## How do I add a custom Model ?
 To add a custom model, create a file inside `models/` directory and name it `models/my_vision_network.py`.
 Please refer [here](https://github.com/AIcrowd/neurips2020-procgen-starter-kit/blob/master/models/my_vision_network.py ) for a working implementation of how to add a custom model. You can then set the `custom_model` field in the experiment yaml to `my_vision_network` to cause that model to be used.
