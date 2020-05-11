@@ -1,4 +1,4 @@
-procgen-ppo:
+procgen-starter-example:
     env: procgen_env_wrapper  # Change this at your own risk :D
     run: PPO
     # Can be replaced by any of the available agents as described at :
@@ -21,7 +21,7 @@ procgen-ppo:
     ################################################
     # === Settings for Checkpoints ===
     ################################################
-    checkpoint_freq: 10
+    checkpoint_freq: 1
     checkpoint_at_end: True
     keep_checkpoints_num: 5
 
