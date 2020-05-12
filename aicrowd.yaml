@@ -1,9 +1,0 @@
----
-evaluator_name: neurips2020_procgen
-challenge_client_name: neurips2020_procgen
-evaluation_pipeline_version: '1.0'
-authors:
-- name: Sharada Mohanty
-  email: mohanty@aicrowd.com
-version: '0.1'
-
