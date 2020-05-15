@@ -73,11 +73,12 @@ class CustomCallbacks(DefaultCallbacks):
             kwargs: Forward compatibility placeholder.
         """
         ######################################################################
-        # In this example we add `timesteps_throughput` to the
-        # episode custom metrics.
+        # An example of adding a custom metric from the latest observation 
+        # from your env
         ######################################################################
-        timesteps_throughput = episode.last_info_for()["timesteps_throughput"]
-        episode.custom_metrics["timesteps_throughput"] = timesteps_throughput
+        # last_obs_object_from_episode = episode.last_observation_for()
+        # We define a dummy custom metric, observation_mean
+        # episode.custom_metrics["observation_mean"] = last_obs_object_from_episode.mean()
 
     def on_postprocess_trajectory(
             self, worker: RolloutWorker, episode: MultiAgentEpisode,
@@ -124,9 +125,7 @@ class CustomCallbacks(DefaultCallbacks):
             kwargs: Forward compatibility placeholder.
         """
         # In this case we also print the mean timesteps throughput
-        # from the custom metrics, for easier reference in the logs
-        if "timesteps_throughput_mean" in result["custom_metrics"]:
-            timesteps_throughput = result["custom_metrics"]["timesteps_throughput_mean"]
-            print("=============================================================")
-            print(" Timesteps Throughput : {} ts/sec".format(timesteps_throughput))
-            print("=============================================================")
+        # for easier reference in the logs
+        # print("=============================================================")
+        # print(" Timesteps Throughput : {} ts/sec".format(TBD))
+        # print("=============================================================")
