@@ -79,6 +79,7 @@ class CustomCallbacks(DefaultCallbacks):
         # last_obs_object_from_episode = episode.last_observation_for()
         # We define a dummy custom metric, observation_mean
         # episode.custom_metrics["observation_mean"] = last_obs_object_from_episode.mean()
+        pass
 
     def on_postprocess_trajectory(
             self, worker: RolloutWorker, episode: MultiAgentEpisode,
@@ -129,3 +130,4 @@ class CustomCallbacks(DefaultCallbacks):
         # print("=============================================================")
         # print(" Timesteps Throughput : {} ts/sec".format(TBD))
         # print("=============================================================")
+        pass
