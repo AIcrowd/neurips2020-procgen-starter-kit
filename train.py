@@ -14,6 +14,7 @@ from ray.tune.tune import _make_scheduler, run_experiments
 from ray.rllib.utils.framework import try_import_tf, try_import_torch
 
 from utils.loader import load_envs, load_models, load_algorithms
+from callbacks import CustomCallbacks
 
 # Try to import both backends for flag checking/warnings.
 tf = try_import_tf()
@@ -197,6 +198,9 @@ def run(args, parser):
             if not exp["config"].get("eager"):
                 raise ValueError("Must enable --eager to enable tracing.")
             exp["config"]["eager_tracing"] = True
+
+        ### Add Custom Callbacks
+        exp["config"]["callbacks"] = CustomCallbacks
 
     if args.ray_num_nodes:
         cluster = Cluster()
