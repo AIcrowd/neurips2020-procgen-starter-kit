@@ -3,11 +3,12 @@ from typing import Dict
 
 import ray
 from ray.rllib.env import BaseEnv
-from ray.rllib.policy import Policy, PolicyID, AgentID
+from ray.rllib.policy import Policy
 from ray.rllib.policy.sample_batch import SampleBatch
 from ray.rllib.evaluation import MultiAgentEpisode, RolloutWorker
 from ray.rllib.agents.callbacks import DefaultCallbacks
 
+import numpy as np
 
 class CustomCallbacks(DefaultCallbacks):
     """
@@ -23,7 +24,7 @@ class CustomCallbacks(DefaultCallbacks):
     """
 
     def on_episode_start(self, worker: RolloutWorker, base_env: BaseEnv,
-                         policies: Dict[PolicyID, Policy],
+                         policies: Dict[str, Policy],
                          episode: MultiAgentEpisode, **kwargs):
         """Callback run on the rollout worker before each episode starts.
         Args:
@@ -56,7 +57,7 @@ class CustomCallbacks(DefaultCallbacks):
         pass
 
     def on_episode_end(self, worker: RolloutWorker, base_env: BaseEnv,
-                       policies: Dict[PolicyID, Policy],
+                       policies: Dict[str, Policy],
                        episode: MultiAgentEpisode, **kwargs):
         """Runs when an episode is done.
         Args:
@@ -71,22 +72,18 @@ class CustomCallbacks(DefaultCallbacks):
                 metrics for the episode.
             kwargs: Forward compatibility placeholder.
         """
-
         ######################################################################
-        # In this example we add `timestep_throughput` as a custom metric 
+        # In this example we add `timesteps_throughput` to the
+        # episode custom metrics.
         ######################################################################
-        timestep_throughput = episode.last_info_for()["timestep_throughput"] 
-        print("episode {} ended with length {} and throughput {}".format(
-            episode.episode_id, episode.length, timestep_throughput))
-        episode.custom_metrics["timestep_throughput"] = timestep_throughput
-        episode.hist_data["timestep_throughput"] = timestep_throughput
-
+        timesteps_throughput = episode.last_info_for()["timesteps_throughput"]
+        episode.custom_metrics["timesteps_throughput"] = timesteps_throughput
 
     def on_postprocess_trajectory(
             self, worker: RolloutWorker, episode: MultiAgentEpisode,
-            agent_id: AgentID, policy_id: PolicyID,
-            policies: Dict[PolicyID, Policy], postprocessed_batch: SampleBatch,
-            original_batches: Dict[AgentID, SampleBatch], **kwargs):
+            agent_id: str, policy_id: str,
+            policies: Dict[str, Policy], postprocessed_batch: SampleBatch,
+            original_batches: Dict[str, SampleBatch], **kwargs):
         """Called immediately after a policy's postprocess_fn is called.
         You can use this callback to do additional postprocessing for a policy,
         including looking at the trajectory data of other agents in multi-agent
@@ -126,4 +123,10 @@ class CustomCallbacks(DefaultCallbacks):
                 You can mutate this object to add additional metrics.
             kwargs: Forward compatibility placeholder.
         """
-        pass    
+        # In this case we also print the mean timesteps throughput
+        # from the custom metrics, for easier reference in the logs
+        if "timesteps_throughput_mean" in result["custom_metrics"]:
+            timesteps_throughput = result["custom_metrics"]["timesteps_throughput_mean"]
+            print("=============================================================")
+            print(" Timesteps Throughput : {} ts/sec".format(timesteps_throughput))
+            print("=============================================================")

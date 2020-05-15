@@ -57,7 +57,7 @@ class ProcgenEnvWrapper(gym.Env):
             # When episode ends collect the mean time taken per timestep
             mean_time_per_step = np.array(self.step_times).mean()
             # Compute throughput as number of timesteps per second
-            info["timestep_throughput"] = 1.0 / mean_time_per_step
+            info["timesteps_throughput"] = 1.0 / mean_time_per_step
 
         return obs, rew, done, info
 
