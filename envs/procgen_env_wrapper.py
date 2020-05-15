@@ -1,7 +1,8 @@
+import time
 import gym
+import numpy as np
 
 from ray.tune import registry
-
 from procgen.env import ENV_NAMES as VALID_ENV_NAMES
 
 class ProcgenEnvWrapper(gym.Env):
@@ -23,7 +24,7 @@ class ProcgenEnvWrapper(gym.Env):
         self.config.update(config)
 
         self.env_name = self.config.pop("env_name")
-        
+
         assert self.env_name in VALID_ENV_NAMES
 
         env = gym.make(f"procgen:procgen-{self.env_name}-v0", **self.config)
@@ -35,13 +36,29 @@ class ProcgenEnvWrapper(gym.Env):
         self.observation_space = self.env.observation_space
         self._done = True
 
+        self.last_interaction_timestamp = None
+        self.step_times = []
+
     def reset(self):
         assert self._done, "procgen envs cannot be early-restarted"
+        self.last_interaction_timestamp = time.time()
         return self.env.reset()
 
     def step(self, action):
         obs, rew, done, info = self.env.step(action)
         self._done = done
+        # Collect time taken per step
+        self.step_times.append(
+            time.time() - self.last_interaction_timestamp
+        )
+        self.last_interaction_timestamp = time.time()
+
+        if done:
+            # When episode ends collect the mean time taken per timestep
+            mean_time_per_step = np.array(self.step_times).mean()
+            # Compute throughput as number of timesteps per second
+            info["timesteps_throughput"] = 1.0 / mean_time_per_step
+
         return obs, rew, done, info
 
     def render(self, mode="human"):

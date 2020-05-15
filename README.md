@@ -86,6 +86,7 @@ TODO - Mohanty to elaborate later
 │   │   └── __init__.py
 │   ├── __init__.py
 │   └── registry.py
+├── callbacks.py                    # Custom Callbacks & Custom Metrics
 ├── Dockerfile                      # Docker config for your submission environment
 ├── docs
 │   ├── algorithms.md
@@ -149,7 +150,7 @@ You can create a submission by pushing a tag to your repository with a prefix `s
 ```bash
 
 # Optional: Start working with starter kit as starting point.
-git clone https://gitlab.aicrowd.com/aicrowd/neurips-2020-procgen-starter-kit
+git clone https://gitlab.aicrowd.com/spMohanty/neurips-2020-procgen-starter-kit
 cd neurips-2020-procgen-starter-kit
 
 # Add AICrowd git remote endpoint
