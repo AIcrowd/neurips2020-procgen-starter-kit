@@ -94,5 +94,3 @@ if [ "$VALID_RUN" = false ] ; then
     print_usage
     STATUS_CODE=1
 fi
-
-exit $STATUS_CODE
