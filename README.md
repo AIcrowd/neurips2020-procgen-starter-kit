@@ -147,6 +147,8 @@ The evaluator will use `/home/aicrowd/run.sh` as the entrypoint. Please remember
 Before making submission, you need to have your git setup done and add SSH key on AIcrowd GitLab.
 You can create a submission by pushing a tag to your repository with a prefix `submission-`. An example is shown below (you can keep repository name as you desire or have multiple repositories):
 
+**NOTE** : Before you make a submission, please ensure to accept the challenge rules by accepting the challenge rules by clicking the `Participate` button at : [https://www.aicrowd.com/challenges/neurips-2020-procgen-competition](https://www.aicrowd.com/challenges/neurips-2020-procgen-competition).
+
 ```bash
 
 # Optional: Start working with starter kit as starting point.
@@ -154,7 +156,7 @@ git clone git@github.com:spMohanty/neurips2020-procgen-starter-kit.git
 cd neurips-2020-procgen-starter-kit
 
 # Add AICrowd git remote endpoint
-git remote add aicrowd git@gitlab.aicrowd.com:<user>/neurips-2020-procgen-starter-kit.git
+git remote add aicrowd git@gitlab.aicrowd.com:<your-aicrowd-username>/neurips-2020-procgen-starter-kit.git
 git push aicrowd master
 
 # Create a tag for your submission and push
@@ -167,16 +169,10 @@ git push aicrowd submission-v0.1
 ```
 
 You should now be able to see the details of your submission in the repository's issues page.
+`https://gitlab.aicrowd.com/<your-aicrowd-username>/neurips-2020-procgen-starter-kit/issues`
 
 Happy Submitting!! :rocket:
 
-## Locally running the code
-You can run the code by executing `run.sh` file in the repository.
-
-```bash
-cd <repository>
-./debug.sh
-```
 
 # Author(s)
 - [Sharada Mohanty](https://twitter.com/MeMohanty/)
