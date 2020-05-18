@@ -4,5 +4,5 @@
     "authors" : ["Sharada Mohanty <mohanty@aicrowd.com>"],
     "description": "Procgen test submission",
     "docker_build": false,
-    "debug" : true
+    "debug" : false
 }
