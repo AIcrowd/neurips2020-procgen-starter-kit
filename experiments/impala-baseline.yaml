@@ -198,7 +198,7 @@ procgen-ppo:
         ################################################
         # Number of rollout worker actors to create for parallel sampling. Setting
         # this to 0 will force rollouts to be done in the trainer actor.
-        num_workers: 7
+        num_workers: 6
 
         # Number of environments to evaluate vectorwise per worker. This enables
         # model inference batching, which can improve performance for inference
