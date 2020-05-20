@@ -147,7 +147,7 @@ The evaluator will use `/home/aicrowd/run.sh` as the entrypoint. Please remember
 
 1) Setup an AIcrowd GitLab account if you don't have one by going to https://gitlab.aicrowd.com/
 2) Add your SSH key on the [SSH Key](https://gitlab.aicrowd.com/profile/keys) page.
-3) If you accept the challenge rules, click the `Participate` button at: [https://www.aicrowd.com/challenges/neurips-2020-procgen-competition]
+3) If you accept the challenge rules, click the `Participate` button on [the AIcrowd contest page](https://www.aicrowd.com/challenges/neurips-2020-procgen-competition)
 4) Create a submission by pushing a tag to your repository with a prefix `submission-`. An example is shown below (you can keep repository name as you desire or have multiple repositories):
 
 ```bash
