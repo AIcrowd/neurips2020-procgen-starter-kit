@@ -227,3 +227,37 @@ procgen-starter-example:
             # EpsilonGreedy)
             type: "StochasticSampling"
             # Can add constructor kwargs here (if any)
+
+        ################################################
+        ################################################
+        # === Advanced Rollout Settings ===
+        ################################################
+        ################################################
+        # Element-wise observation filter, either "NoFilter" or "MeanStdFilter".
+        observation_filter: "NoFilter"
+        # Whether to synchronize the statistics of remote filters.
+        synchronize_filters: True
+        # Whether to LZ4 compress individual observations
+        compress_observations: False
+        # Minimum env steps to optimize for per train call. This value does
+        # not affect learning, only the length of train iterations.
+        timesteps_per_iteration: 0
+        # This argument, in conjunction with worker_index, sets the random seed of
+        # each worker, so that identically configured trials will have identical
+        # results. This makes experiments reproducible.
+        seed: None,
+        
+        ################################################
+        ################################################
+        # === Advanced Resource Settings ===
+        ################################################
+        ################################################
+        # Number of CPUs to allocate per worker.
+        num_cpus_per_worker: 1
+        # Number of GPUs to allocate per worker. This can be fractional. This is
+        # usually needed only if your env itself requires a GPU (i.e., it is a
+        # GPU-intensive video game), or model inference is unusually expensive.
+        num_gpus_per_worker: 0
+        # Number of CPUs to allocate for the trainer. Note: this only takes effect
+        # when running in Tune. Otherwise, the trainer runs in the main program.
+        num_cpus_for_driver: 1
