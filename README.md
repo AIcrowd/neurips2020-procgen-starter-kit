@@ -144,10 +144,11 @@ A sample [`Dockerfile`](Dockerfile) and a corresponding [`requirements.txt`](req
 The evaluator will use `/home/aicrowd/run.sh` as the entrypoint. Please remember to have a `run.sh` at the root which can instantiate any necessary environment variables and execute your code. This repository includes a sample `run.sh` file.
 
 ## Submitting
-Before making submission, you need to have your git setup done and add SSH key on AIcrowd GitLab.  To do that setup, go to https://gitlab.aicrowd.com/ to get an AIcrowd GitLab account, then add your SSH key on the [SSH Key](https://gitlab.aicrowd.com/profile/keys) page.
-You can create a submission by pushing a tag to your repository with a prefix `submission-`. An example is shown below (you can keep repository name as you desire or have multiple repositories):
 
-**NOTE** : Before you make a submission, please ensure to accept the challenge rules by accepting the challenge rules by clicking the `Participate` button at : [https://www.aicrowd.com/challenges/neurips-2020-procgen-competition](https://www.aicrowd.com/challenges/neurips-2020-procgen-competition).
+1) Setup an AIcrowd GitLab account if you don't have one by going to https://gitlab.aicrowd.com/
+2) Add your SSH key on the [SSH Key](https://gitlab.aicrowd.com/profile/keys) page.
+3) If you accept the challenge rules, click the `Participate` button at: [https://www.aicrowd.com/challenges/neurips-2020-procgen-competition]
+4) Create a submission by pushing a tag to your repository with a prefix `submission-`. An example is shown below (you can keep repository name as you desire or have multiple repositories):
 
 ```bash
 
@@ -168,7 +169,7 @@ git push aicrowd submission-v0.1
 # then pushing a new tag will not trigger a new evaluation.
 ```
 
-You should now be able to see the details of your submission in the repository's issues page.
+5) You should now be able to see the details of your submission in the repository's issues page.
 `https://gitlab.aicrowd.com/<your-aicrowd-username>/neurips-2020-procgen-starter-kit/issues`
 
 Happy Submitting!! :rocket:
