@@ -144,7 +144,7 @@ A sample [`Dockerfile`](Dockerfile) and a corresponding [`requirements.txt`](req
 The evaluator will use `/home/aicrowd/run.sh` as the entrypoint. Please remember to have a `run.sh` at the root which can instantiate any necessary environment variables and execute your code. This repository includes a sample `run.sh` file.
 
 ## Submitting
-Before making submission, you need to have your git setup done and add SSH key on AIcrowd GitLab.
+Before making submission, you need to have your git setup done and add SSH key on AIcrowd GitLab.  To do that setup, go to https://gitlab.aicrowd.com/ to get an AIcrowd GitLab account, then add your SSH key on the [SSH Key](https://gitlab.aicrowd.com/profile/keys) page.
 You can create a submission by pushing a tag to your repository with a prefix `submission-`. An example is shown below (you can keep repository name as you desire or have multiple repositories):
 
 **NOTE** : Before you make a submission, please ensure to accept the challenge rules by accepting the challenge rules by clicking the `Participate` button at : [https://www.aicrowd.com/challenges/neurips-2020-procgen-competition](https://www.aicrowd.com/challenges/neurips-2020-procgen-competition).
