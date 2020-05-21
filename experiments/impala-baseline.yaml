@@ -205,11 +205,6 @@ procgen-ppo:
         # bottlenecked workloads.
         num_envs_per_worker: 12
 
-        # Number of GPUs to allocate per worker. This can be fractional. This is
-        # usually needed only if your env itself requires a GPU (i.e., it is a
-        # GPU-intensive video game), or model inference is unusually expensive.
-        num_gpus_per_worker: 0.1
-
         # Divide episodes into fragments of this many steps each during rollouts.
         # Sample batches of this size are collected from rollout workers and
         # combined into a larger batch of `train_batch_size` for learning.
@@ -232,6 +227,21 @@ procgen-ppo:
         # evenly sized batches, but increases variance as the reward-to-go will
         # need to be estimated at truncation boundaries.
         batch_mode: truncate_episodes
+
+        ################################################
+        ################################################
+        # === Advanced Resource Settings ===
+        ################################################
+        ################################################
+        # Number of CPUs to allocate per worker.
+        num_cpus_per_worker: 1
+        # Number of GPUs to allocate per worker. This can be fractional. This is
+        # usually needed only if your env itself requires a GPU (i.e., it is a
+        # GPU-intensive video game), or model inference is unusually expensive.
+        num_gpus_per_worker: 0.1
+        # Number of CPUs to allocate for the trainer. Note: this only takes effect
+        # when running in Tune. Otherwise, the trainer runs in the main program.
+        num_cpus_for_driver: 1
 
         ################################################
         ################################################
@@ -282,17 +292,3 @@ procgen-ppo:
         # results. This makes experiments reproducible.
         seed: null
         
-        ################################################
-        ################################################
-        # === Advanced Resource Settings ===
-        ################################################
-        ################################################
-        # Number of CPUs to allocate per worker.
-        num_cpus_per_worker: 1
-        # Number of GPUs to allocate per worker. This can be fractional. This is
-        # usually needed only if your env itself requires a GPU (i.e., it is a
-        # GPU-intensive video game), or model inference is unusually expensive.
-        num_gpus_per_worker: 0
-        # Number of CPUs to allocate for the trainer. Note: this only takes effect
-        # when running in Tune. Otherwise, the trainer runs in the main program.
-        num_cpus_for_driver: 1
