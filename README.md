@@ -169,6 +169,10 @@ git push aicrowd submission-v0.1
 5) You should now be able to see the details of your submission in the repository's issues page.
 `https://gitlab.aicrowd.com/<your-aicrowd-username>/neurips-2020-procgen-starter-kit/issues`
 
+and something along the lines of : 
+
+![](https://i.imgur.com/j9TYaJ1.png)
+
 Happy Submitting!! :rocket:
 
 
