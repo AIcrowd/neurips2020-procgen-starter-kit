@@ -70,9 +70,6 @@ Please refer to the instructions [here](https://github.com/AIcrowd/neurips2020-p
 This is a very thin wrapper over RLLib. Hence, you have all the RLLib config options available in the experiment configuration (YAML) file to play with.
 Please refer to [this example](https://github.com/AIcrowd/neurips2020-procgen-starter-kit/blob/master/experiments/procgen-starter-example.yaml) for an explanation on the structure and available options in the experiment config file.
 
-## How will my code be evaluated ?
-TODO - Mohanty to elaborate later
-
 # 🚀 Submission
 
 ## Repository Structure
