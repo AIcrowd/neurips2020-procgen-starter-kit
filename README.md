@@ -15,20 +15,6 @@ These environments are associated with the paper [Leveraging Procedural Generati
 * Non-deterministic: Gym Retro environments are always the same, so you can memorize a sequence of actions that will get the highest reward.  Procgen environments are randomized so this is not possible.
 * Customizable: If you install from source, you can perform experiments where you change the environments, or build your own environments.  The environment-specific code for each environment is often less than 300 lines.  This is almost impossible with Gym Retro.
 
-# ⚙ System Requirements
-
-* Supported platforms:
-  - Windows 10
-  - macOS 10.14 (Mojave), 10.15 (Catalina)
-  - Linux (manylinux2010)
-
-* Supported Pythons:
-  - 3.6 64-bit
-  - 3.7 64-bit
-
-* Supported CPUs:
-  - Must have at least AVX
-
 # 🔧 Installation
 ```
 pip install ray[rllib]==0.8.4
