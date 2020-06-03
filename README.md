@@ -33,7 +33,7 @@ These environments are associated with the paper [Leveraging Procedural Generati
 ```
 pip install ray[rllib]==0.8.4
 pip install tensorflow==2.1.0 # or tensorflow-gpu
-pip install procgen==0.9.4
+pip install procgen==0.10.1
 ```
 
 # 💪 Getting Started
