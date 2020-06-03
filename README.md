@@ -157,7 +157,7 @@ git push aicrowd submission-v0.1
 
 and something along the lines of : 
 
-![](https://i.imgur.com/j9TYaJ1.png)
+![](https://i.imgur.com/fjweYIE.png)
 
 Happy Submitting!! :rocket:
 
