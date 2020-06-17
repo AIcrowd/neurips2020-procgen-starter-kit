@@ -14,6 +14,10 @@ RUN apt -qq update && apt -qq install -y --no-install-recommends \
     freeglut3-dev \
  && rm -rf /var/cache/*
 
+# S3 client
+RUN wget -nv -O ./mc https://dl.min.io/client/mc/release/linux-amd64/mc \
+ && mv ./mc /bin/mc && chmod +x /bin/mc
+
 # Unicode support:
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
