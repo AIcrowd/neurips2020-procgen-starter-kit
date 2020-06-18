@@ -1,18 +1,23 @@
-FROM ubuntu:18.04
+FROM nvidia/cuda:10.1-cudnn7-runtime-ubuntu18.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt -qq update && apt -qq install -y --no-install-recommends \
     wget \
+    ca-certificates \
     locales \
     libglib2.0 \
-    libsm6 \
     libsm6 \
     libxext6 \
     libxrender-dev \
     xvfb \
+    ffmpeg \
     freeglut3-dev \
  && rm -rf /var/cache/*
+
+# S3 client
+RUN wget -nv -O ./mc https://dl.min.io/client/mc/release/linux-amd64/mc \
+ && mv ./mc /bin/mc && chmod +x /bin/mc
 
 # Unicode support:
 RUN locale-gen en_US.UTF-8
