@@ -137,7 +137,7 @@ The evaluator will use `/home/aicrowd/run.sh` as the entrypoint. Please remember
 
 # Optional: Start working with starter kit as starting point.
 git clone git@github.com:AIcrowd/neurips2020-procgen-starter-kit.git
-cd neurips-2020-procgen-starter-kit
+cd neurips2020-procgen-starter-kit
 
 # Add AICrowd git remote endpoint
 git remote add aicrowd git@gitlab.aicrowd.com:<your-aicrowd-username>/neurips-2020-procgen-starter-kit.git
