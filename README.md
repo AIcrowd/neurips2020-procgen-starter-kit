@@ -1,7 +1,7 @@
 # NeurIPS 2020 - Procgen Starter Kit
 ![AIcrowd-Logo](https://raw.githubusercontent.com/AIcrowd/AIcrowd/master/app/assets/images/misc/aicrowd-horizontal.png)
 
-This is the starter kit for the [NeurIPS 2020 - Procgen competition](LINK-TO-BE-INSERTED) hosted on [AIcrowd](https://www.aicrowd.com/)
+This is the starter kit for the [NeurIPS 2020 - Procgen competition](https://www.aicrowd.com/challenges/neurips-2020-procgen-competition) hosted on [AIcrowd](https://www.aicrowd.com/)
 
 # 🕵️ About ProcGen Benchmark
 
