@@ -19,3 +19,5 @@ procgen-starter-example:
       use_sequential_levels: False
       distribution_mode: easy
 
+    model:
+      custom_preprocessor: MyPreprocessor
