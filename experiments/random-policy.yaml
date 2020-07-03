@@ -1,0 +1,23 @@
+procgen-starter-example:
+  env: procgen_env_wrapper  # Change this at your own risk :D
+  run: RandomPolicy
+
+  stop:
+    timesteps_total: 300000
+  checkpoint_freq: 1
+  checkpoint_at_end: True
+  keep_checkpoints_num: 5
+
+  config:
+    env_config:
+      env_name: coinrun
+      num_levels: 0
+      start_level: 0
+      paint_vel_info: False
+      use_generated_assets: False
+      center_agent: True
+      use_sequential_levels: False
+      distribution_mode: easy
+
+    model:
+      custom_preprocessor: MyPreprocessor

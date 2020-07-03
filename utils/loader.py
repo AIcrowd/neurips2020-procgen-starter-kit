@@ -95,3 +95,11 @@ def load_algorithms(CUSTOM_ALGORITHMS):
             _custom_algorithm_name,
             _class)
 
+
+def load_preprocessors(CUSTOM_PREPROCESSORS):
+    """Function to register custom preprocessors
+    """
+    from ray.rllib.models import ModelCatalog
+
+    for _precessor_name, _processor_class in CUSTOM_PREPROCESSORS.items():
+        ModelCatalog.register_custom_preprocessor(_precessor_name, _processor_class)
