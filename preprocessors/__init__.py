@@ -2,6 +2,4 @@
 
 from .custom_preprocessor import MyPreprocessorClass
 
-CUSTOM_PREPROCESSORS = {
-    "MyPreprocessor": MyPreprocessorClass
-}
+CUSTOM_PREPROCESSORS = {"MyPreprocessor": MyPreprocessorClass}

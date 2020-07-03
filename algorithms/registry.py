@@ -18,8 +18,8 @@ def _import_custom_random_agent():
     return CustomRandomAgent
 
 def _import_random_policy():
-    from .random_agent.trainer import RandomAgentTrainer
-    return RandomAgentTrainer
+    from .random_policy.trainer import RandomPolicyTrainer
+    return RandomPolicyTrainer
 
 
 CUSTOM_ALGORITHMS = {
