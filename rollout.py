@@ -26,7 +26,7 @@ from ray.rllib.utils.deprecation import deprecation_warning
 from ray.tune.utils import merge_dicts
 from ray.tune.registry import get_trainable_cls
 
-from utils.loader import load_envs, load_models, load_algorithms
+from utils.loader import load_envs, load_models, load_algorithms, load_preprocessors
 
 """
 Note : This script has been adapted from :
@@ -49,6 +49,9 @@ load_models(os.getcwd()) # Load models
 # Load custom algorithms
 from algorithms import CUSTOM_ALGORITHMS
 load_algorithms(CUSTOM_ALGORITHMS)
+# Load custom preprocessors
+from preprocessors import CUSTOM_PREPROCESSORS
+load_preprocessors(CUSTOM_PREPROCESSORS)
 
 
 class RolloutSaver:
