@@ -145,7 +145,6 @@ git push aicrowd master
 
 # Create a tag for your submission and push
 git tag -am "submission-v0.1" submission-v0.1
-git push aicrowd master
 git push aicrowd submission-v0.1
 
 # Note : If the contents of your repository (latest commit hash) does not change, 
