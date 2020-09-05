@@ -3,6 +3,6 @@
     "grader_id": "evaluations-api-neurips-2020-procgen",
     "authors" : ["Sharada Mohanty <mohanty@aicrowd.com>"],
     "description": "Procgen test submission",
-    "docker_build": false,
+    "docker_build": true,
     "debug" : false
 }

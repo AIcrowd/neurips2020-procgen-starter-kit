@@ -1,5 +1,8 @@
-ray[rllib]==0.8.5
-procgen==0.10.1
-tensorflow==2.1.0
+ray[rllib]==0.8.6
+procgen==0.10.4
+tensorflow-gpu==2.2.0
 mlflow==1.8.0
 boto3==1.13.10
+requests
+torch==1.6.0+cu101
+torchvision==0.7.0+cu101

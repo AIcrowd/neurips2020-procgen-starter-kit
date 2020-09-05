@@ -58,4 +58,4 @@ RUN wget -nv -O miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-py37
 
 ENV PATH ${CONDA_DIR}/bin:${PATH}
 
-RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install -r requirements.txt --no-cache-dir -f https://download.pytorch.org/whl/torch_stable.html

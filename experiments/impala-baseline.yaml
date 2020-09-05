@@ -125,7 +125,7 @@ procgen-ppo:
         # Use PyTorch (instead of tf). If using `rllib train`, this can also be
         # enabled with the `--torch` flag.
         # NOTE: Some agents may not support `torch` yet and throw an error.
-        use_pytorch: False
+        use_pytorch: True
 
         ################################################
         ################################################
@@ -187,7 +187,7 @@ procgen-ppo:
             # Examples of implementing the model in Keras is also available
             # here :
             # https://github.com/ray-project/ray/blob/master/rllib/examples/custom_keras_model.py
-            custom_model: impala_cnn_tf
+            custom_model: impala_cnn_torch
             # Extra options to pass to custom class
             custom_options: {}
 
