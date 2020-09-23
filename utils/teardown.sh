@@ -13,3 +13,5 @@ _teardown_procgen_env() {
   conda env remove -n procgen
   log_success "Removed procgen environment!"
 }
+
+_teardown_procgen_env
