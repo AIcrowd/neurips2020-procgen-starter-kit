@@ -11,7 +11,7 @@ log_success Validated experiment YAML file
 
 print_usage() {
 cat << USAGE
-Usage: ./utilities/submit.sh "impala-ppo-v0.1"
+Usage: ./utils/submit.sh "impala-ppo-v0.1"
 USAGE
 }
 

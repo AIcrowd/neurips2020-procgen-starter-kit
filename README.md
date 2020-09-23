@@ -16,20 +16,43 @@ These environments are associated with the paper [Leveraging Procedural Generati
 * Customizable: If you install from source, you can perform experiments where you change the environments, or build your own environments.  The environment-specific code for each environment is often less than 300 lines.  This is almost impossible with Gym Retro.
 
 # 🔧 Installation
+
+## Quick start
+
+```bash
+git clone https://github.com/AIcrowd/neurips2020-procgen-starter-kit.git
+./utils/setup.sh
 ```
-pip install ray[rllib]==0.8.5
-pip install tensorflow==2.1.0 # or tensorflow-gpu
-pip install procgen==0.10.2
+
+## Manually setup the environment
+
+- Clone this repository
+
+```bash
+git clone https://github.com/AIcrowd/neurips2020-procgen-starter-kit.git
 ```
+
+- Download and install [Miniconda](https://docs.conda.io/en/latest/miniconda.html) (if you don't have it already)
+
+- Create a new environment with python 3.7
+
+```bash
+conda create -n procgen -y
+conda activate procgen
+conda install python=3.7 -y
+```
+
+- Install dependencies
+
+```bash
+conda activate procgen
+pip install ray[rllib]==0.8.6
+pip install procgen
+```
+
+- Install the DL framework of you choice (tensorflow, pytorch, etc.,)
 
 # 💪 Getting Started
-
-### Clone the repository
-
-```
-git clone git@github.com:AIcrowd/neurips2020-procgen-starter-kit.git
-cd neurips2020-procgen-starter-kit
-```
 
 ### Train your agent
 
@@ -62,35 +85,41 @@ Please refer to [this example](https://github.com/AIcrowd/neurips2020-procgen-st
 
 ```
 .
-├── aicrowd.json                     # Submission config file (required)
-├── algorithms                       # Directory to implement your custom algorithm/trainable/agent
+├── aicrowd_helpers                     # Helper files (DO NOT EDIT)
+├── algorithms                          # Directory to implement your custom algorithm/trainable/agent
 │   ├── custom_random_agent
-│   │   ├── custom_random_agent.py
-│   │   └── __init__.py
+│   ├── random_policy
 │   ├── __init__.py
-│   └── registry.py
-├── callbacks.py                    # Custom Callbacks & Custom Metrics
-├── Dockerfile                      # Docker config for your submission environment
-├── docs
-│   ├── algorithms.md
-│   ├── procgen-basic-usage.md
-│   └── submission.md
-│   └── running.md
-├── envs                            # `rllib` wrapper for procgen (required)
-│   └── procgen_env_wrapper.py
-├── experiments                     # Directory contaning the config for different experiments
-│   └── procgen-starter-example.yaml
-│   └── impala-baseline.yaml        # Baseline using impala
-│   └── <your-experiment>.yaml      # Contribute your experiment by adding it here and send us merge request
-├── models                          # Directory to implement custom models
+│   └── registry.py                     # Register your custom agents here
+├── envs
+│   ├── __init__.py
+│   ├── framestack.py                   # Example for using custom env wrappers
+│   ├── procgen_env_wrapper.py          # Base env used during evaluations (DO NOT EDIT)
+├── experiments                         # Directory contaning the config for different experiments
+│   ├── impala-baseline.yaml            # Baseline using impala
+│   ├── procgen-starter-example.yaml    # Sample experiment config file
+│   └── random-policy.yaml              # Sample random policy config file
+├── models                              # Directory to implement custom models
+│   ├── impala_cnn_tf.py
+│   ├── impala_cnn_torch.py
 │   └── my_vision_network.py
-├── README.md
-├── requirements.txt                # These python packages will be installed using `pip`
-├── rollout.py                      # Rollouts for your model
-├── run.sh                          # Entrypoint to your submission code (required)
-├── train.py                        # Simple script to trigger the training using `rllib` (do not change)
-└── utils                           # Directory containing utility functions
-    └── loader.py
+├── preprocessors                       # Directory to implement your custom observation wrappers
+│   ├── __init__.py                     # Register your preprocessors here
+│   └── custom_preprocessor.py
+├── utils                               # Helper scripts for the competition
+│   ├── setup.sh                        # Setup local procgen environment using `conda`
+│   ├── submit.sh                       # Submit your solution
+│   ├── teardown.sh                     # Remove the existing local procgen environment using `conda`
+│   ├── validate_config.py              # Validate the experiment YAML file
+│   └── loader.py
+├── Dockerfile                          # Docker config for your submission environment
+├── aicrowd.json                        # Submission config file (required)
+├── callbacks.py                        # Custom Callbacks & Custom Metrics
+├── requirements.txt                    # These python packages will be installed using `pip`
+├── rollout.py                          # Rollout script (DO NOT EDIT)
+├── run.sh                              # Entrypoint to your submission
+└── train.py                            # Script to trigger the training using `rllib` (DO NOT EDIT)
+
 ```
 
 ## `aicrowd.json`
@@ -106,35 +135,33 @@ Your repository should have an aicrowd.json file with following fields:
 }
 ```
 
-This file is used to identify your submission as a part of the NeurIPS 2020 Procgen Competition Challenge. You must use the `challenge_id`, `grader_id`, and `evaluations_api_grader_id` specified above in the submission.
+This file is used to identify your submission as a part of the NeurIPS 2020 Procgen Competition Challenge. You must use the `challenge_id`, and `grader_id` as specified above.
 
 ## Submission environment configuration
-By default we will run your code in an Ubuntu 18.04 environment with tensorflow, pytorch, mlflow, ray[rllib] and procgen installed.
+By default we will run your code in an Ubuntu 18.04 environment with `tensorflow==1.14.0`, `ray[rllib]==0.8.5` and `procgen` installed.
 
 If you want to run your submissions in a customized environment, first head to `aicrowd.json` and set `docker_build` to `true`. This flag tells that you need a custom environment.
 
-You can specify your software environment by using `Dockerfile`, `environment.yml`, `requirements.txt`, `apt.txt`. Available options are
+You can specify your software environment by using `Dockerfile``requirements.txt`. Available options are
 
 - `requirements.txt`: We will use `pip install -r requiremens.txt` to install your packages.
-- `environment.yml`: We will use `conda` to install the packages in your environment.
-- `apt.txt`: We will install the packages in `apt.txt` before conda/pip installations.
-- `Dockerfile`: We will build the docker image using the specified Dockerfile. **If you have a Dockerfile in your repository, any other automatic installation will not be triggered.** This means that you will have to include installation steps for `apt.txt`, `requirements.txt`, and `environment.txt` yourself.
+- `Dockerfile`: We will build the docker image using the specified Dockerfile. **If you have a Dockerfile in your repository, any other automatic installation will not be triggered.** This means that you will have to include installation steps for packages in `requirements.txt` yourself.
 
 A sample [`Dockerfile`](Dockerfile) and a corresponding [`requirements.txt`](requirements.txt) are provided in this repository for you reference.
 
 
 ## Code entrypoint
-The evaluator will use `/home/aicrowd/run.sh` as the entrypoint. Please remember to have a `run.sh` at the root which can instantiate any necessary environment variables and execute your code. This repository includes a sample `run.sh` file.
+The evaluator will read the value of `EXPERIMENT` from `run.sh` in the repository. During the training phase, we will use the file provided by `EXPERIMENT` variable to launch the training. During the rollouts phase, we will use the most recent checkpoint and start rollouts with that.
 
 ## Submitting
+
+### Initial setup
 
 1) Setup an AIcrowd GitLab account if you don't have one by going to https://gitlab.aicrowd.com/
 2) [Add your SSH key](https://discourse.aicrowd.com/t/how-to-add-ssh-key-to-gitlab/2603)
 3) If you accept the challenge rules, click the `Participate` button on [the AIcrowd contest page](https://www.aicrowd.com/challenges/neurips-2020-procgen-competition)
-4) Create a submission by pushing a tag to your repository with a prefix `submission-`. An example is shown below (you can keep repository name as you desire or have multiple repositories):
 
 ```bash
-
 # Optional: Start working with starter kit as starting point.
 git clone git@github.com:AIcrowd/neurips2020-procgen-starter-kit.git
 cd neurips2020-procgen-starter-kit
@@ -142,7 +169,22 @@ cd neurips2020-procgen-starter-kit
 # Add AICrowd git remote endpoint
 git remote add aicrowd git@gitlab.aicrowd.com:<your-aicrowd-username>/neurips-2020-procgen-starter-kit.git
 git push aicrowd master
+```
 
+### Submitting using the helper script
+```bash
+./utils/submit.sh "<your submission message>"
+```
+
+For example,
+```bash
+./utils/submit.sh "impala-ppo-v0.1"
+```
+
+### Manually submitting the code
+Create a submission by pushing a tag to your repository with a prefix `submission-`. An example is shown below (you can keep repository name as you desire or have multiple repositories):
+
+```bash
 # Create a tag for your submission and push
 git tag -am "submission-v0.1" submission-v0.1
 git push aicrowd master
@@ -156,8 +198,7 @@ git push aicrowd submission-v0.1
 `https://gitlab.aicrowd.com/<your-aicrowd-username>/neurips-2020-procgen-starter-kit/issues`
 
 and something along the lines of : 
-
-![](https://i.imgur.com/fjweYIE.png)
+![](https://i.imgur.com/0dMFZ9x.png)
 
 Happy Submitting!! :rocket:
 

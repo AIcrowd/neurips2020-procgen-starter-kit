@@ -14,12 +14,7 @@ if [[ -z $AICROWD_IS_GRADING ]]; then
   # the codebase on your machines. During evaluation AICROWD_IS_GRADING    #
   # variable is set, due to which this block will be skipped.              #
   ##########################################################################
-
   export OUTPUTS_DIR=./outputs
-  export RAY_MEMORY_LIMIT=1500000000
-  export RAY_CPUS=2
-  export RAY_STORE_MEMORY=1000000000
-
   # Cleaning output directory between multiple runs
   rm -rf ${OUTPUTS_DIR}
   mkdir ${OUTPUTS_DIR}
@@ -69,8 +64,8 @@ print_banner
 
 if [[ " $@ " =~ " --train " ]]; then
   export VALID_RUN=true
-  echo "Executing: python train.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}"
-  python train.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
+  echo "Executing: python train.py -f ${EXPERIMENT}"
+  python train.py -f ${EXPERIMENT}
   STATUS_CODE=$?
 fi
 

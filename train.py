@@ -15,6 +15,7 @@ from ray.rllib.utils.framework import try_import_tf, try_import_torch
 
 from utils.loader import load_envs, load_models, load_algorithms, load_preprocessors
 from callbacks import CustomCallbacks
+from aicrowd_helpers.config import EASY_GAME_RANGES
 
 # Try to import both backends for flag checking/warnings.
 tf = try_import_tf()
@@ -204,6 +205,18 @@ def run(args, parser):
 
         ### Add Custom Callbacks
         exp["config"]["callbacks"] = CustomCallbacks
+
+        ### Pop AIcrowd evaluation specific config
+        _ = exp.pop("disable_evaluation_worker", False)
+
+        ### Add game rewards
+        env_name = exp.get("config").get("env_config").get("env_name", "coinrun")
+        return_min = EASY_GAME_RANGES.get(env_name)[0]
+        return_blind = EASY_GAME_RANGES.get(env_name)[1]
+        return_max = EASY_GAME_RANGES.get(env_name)[2]
+        exp["config"]["env_config"]["return_min"] = return_min
+        exp["config"]["env_config"]["return_blind"] = return_blind
+        exp["config"]["env_config"]["return_max"] = return_max
 
     if args.ray_num_nodes:
         cluster = Cluster()

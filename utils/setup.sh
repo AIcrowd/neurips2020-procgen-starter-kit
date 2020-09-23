@@ -67,7 +67,7 @@ _create_procgen_env() {
 create_procgen_env() {
   if [ -d "${HOME}/miniconda3/envs/procgen" ] || [ -d "${HOME}/anaconda3/envs/procgen" ]; then
     log_error "Found an existing procgen environment"
-    log_normal "If this is not expected, please run \`./utilities/teardown.sh\` and re-run \`./utilities/setup.sh\`"
+    log_normal "If this is not expected, please run \`./utils/teardown.sh\` and re-run \`./utils/setup.sh\`"
     return
   fi
   _create_procgen_env
